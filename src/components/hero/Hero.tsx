@@ -1,15 +1,9 @@
+import { heroStickers } from '@/content/hero-graphics'
 import { DoodleGraphic } from './DoodleGraphic'
 import { FrameCluster } from './FrameCluster'
 import { HeroBackground } from './HeroBackground'
 import { PaperTear } from './PaperTear'
-import {
-  CoffeeCup,
-  CurvedArrow,
-  Headphones,
-  Lightbulb,
-  Sparkle,
-  TagBubble,
-} from './graphics/doodles'
+import { Sparkle } from './graphics/doodles'
 
 /**
  * Landing section.
@@ -17,7 +11,7 @@ import {
  * Layers, back to front:
  *   0  ground and faint line art       HeroBackground
  *  10  flank photo scatter             FrameCluster
- *  20  loose doodles                   DoodleGraphic
+ *  20  loose stickers                  DoodleGraphic
  *  20  centre column                   headline, description, CTA
  *  30  torn paper edge                 PaperTear
  *
@@ -34,82 +28,39 @@ export function Hero() {
       <HeroBackground />
       <FrameCluster />
 
-      {/* Loose doodles. Six sit in the gutters between the frames and the copy,
-          two of them drifting. Placement is hand-set rather than generated: they
-          have to miss the frames and the headline at every breakpoint. */}
-      <div className="pointer-events-none absolute inset-0 z-20 hidden text-cream md:block">
-        <DoodleGraphic
-          top={19}
-          left={23}
-          rotate={-12}
-          delay={320}
-          width="clamp(2.5rem, 3.6vw, 3.75rem)"
-          className="pointer-events-auto text-signal"
-          drift
-        >
-          <Lightbulb className="w-full" />
-        </DoodleGraphic>
+      {/* Six stickers plus one drawn accent. Hidden below `md` for the same
+          reason the inner frames are: a 375px viewport has no gutter to put
+          them in without crowding the headline. */}
+      <div className="pointer-events-none absolute inset-0 z-20 hidden md:block">
+        {heroStickers.map((sticker) => (
+          <DoodleGraphic
+            key={sticker.id}
+            top={sticker.top}
+            left={sticker.left}
+            right={sticker.right}
+            rotate={sticker.rotate}
+            delay={sticker.delay}
+            width={sticker.width_css}
+            drift={sticker.drift}
+            className="pointer-events-auto"
+          >
+            <img
+              src={sticker.src}
+              alt=""
+              width={sticker.width}
+              height={sticker.height}
+              loading="lazy"
+              decoding="async"
+              className="h-auto w-full"
+            />
+          </DoodleGraphic>
+        ))}
 
+        {/* The one element in the section that is Signal, and the only drawn
+            mark left in the foreground. It ties the stickers to the CTA. */}
         <DoodleGraphic
-          top={16}
-          right={22}
-          rotate={9}
-          delay={380}
-          width="clamp(3.5rem, 5.5vw, 5.5rem)"
-          className="pointer-events-auto"
-        >
-          <TagBubble label="IDEAS" className="w-full" />
-        </DoodleGraphic>
-
-        <DoodleGraphic
-          top={72}
-          left={21}
-          rotate={7}
-          delay={440}
-          width="clamp(3.5rem, 5.5vw, 5.5rem)"
-          className="pointer-events-auto"
-        >
-          <TagBubble label="BUILD" className="w-full" />
-        </DoodleGraphic>
-
-        <DoodleGraphic
-          top={69}
-          right={20}
-          rotate={-8}
-          delay={500}
-          width="clamp(2.75rem, 4vw, 4.25rem)"
-          className="pointer-events-auto"
-          drift
-        >
-          <CoffeeCup className="w-full" />
-        </DoodleGraphic>
-
-        <DoodleGraphic
-          top={40}
-          right={17}
-          rotate={11}
-          delay={560}
-          width="clamp(3rem, 4.5vw, 4.75rem)"
-          className="pointer-events-auto"
-        >
-          <Headphones className="w-full" />
-        </DoodleGraphic>
-
-        <DoodleGraphic
-          top={44}
-          left={18}
-          rotate={-14}
-          delay={620}
-          width="clamp(2.25rem, 3.2vw, 3.25rem)"
-          className="pointer-events-auto"
-        >
-          <CurvedArrow className="w-full" />
-        </DoodleGraphic>
-
-        <DoodleGraphic
-          top={28}
+          top={27}
           left={44}
-          rotate={0}
           delay={680}
           width="clamp(0.9rem, 1.3vw, 1.4rem)"
           className="pointer-events-auto text-signal"

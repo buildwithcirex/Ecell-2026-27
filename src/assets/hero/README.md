@@ -1,42 +1,42 @@
-# Hero assets
+# Hero assets (generated)
 
-Drop the landing section's real images here, then point `src/content/hero-assets.ts` at them.
+**Everything in this folder is generated. Do not edit these files by hand.**
 
-## What goes in this folder
+They are produced from the originals in `src/assets/` by:
 
-| Slot | Count | Notes |
-|------|-------|-------|
-| Flank photos | 10 | Event and team photos. Landscape, portrait and square all work, the manifest carries each one's aspect ratio. |
-| `landing-end` | 1 | The character that peeks over the torn paper edge. |
-| Logo | 1 | Or put it in `public/` if it is also used as a favicon. |
-
-## Adding one
-
-```ts
-// src/content/hero-assets.ts
-import demoDay from '@/assets/hero/demo-day.jpg'
-
-// ...then on the slot you want:
-{
-  id: 'l1',
-  src: demoDay,
-  alt: 'Two students demoing a prototype to a panel at Demo Day 2025',
-  width: 1600,   // the file's real intrinsic pixel dimensions
-  height: 1200,
-  // position, rotation, tier and shape are already set
-}
+```bash
+python3 scripts/process-hero-assets.py
 ```
 
-`width` and `height` must be the file's actual dimensions. They reserve the box before the image loads, which is what keeps layout shift at zero. Everything else about the slot is already tuned.
+The originals stay the source of truth. Re-run the script whenever one is added or replaced, then point `src/content/hero-assets.ts` (photos, logo, tear character) or `src/content/hero-graphics.ts` (stickers) at the result.
 
-## Before you commit an image
+## What the script does
 
-- Resize so the longest edge is at most 1600px. The frames render between 80px and 220px wide, so anything larger is wasted bytes.
-- Export as `.webp` where you can, `.jpg` otherwise.
-- Write real alt text describing what the photo shows. Every slot currently carries a `COPY-PENDING` placeholder that needs replacing.
+**Cuts out the stickers and the tear character.** They arrive as die-cut art on flat white or black. It floods in from the border and removes only the ground that is actually connected to the edge, so interior white survives — the die-cut outlines, the ghost, the cat. Deleting every white pixel instead would gut them.
 
-## Background removal
+**Drops specks.** A stray mark in a corner would otherwise pad the whole graphic with dead space, because the trim step crops to whatever survives.
 
-Only the `landing-end` graphic and the logo need transparent backgrounds; the photos sit inside frames and do not.
+**Resizes and re-encodes to WebP** at roughly 2.5x the largest size each asset is ever rendered. The originals total 19MB; these total 455KB. The team photos alone were ~1.2MB each and render under 250px wide.
 
-If a graphic arrives on a flat white or single-colour background, that colour can be keyed out programmatically. A photographic subject cut from a real scene needs a proper matting tool, not a colour key. Export those with transparency from the source file instead.
+## Adding a photo
+
+1. Drop the original into `src/assets/team/`.
+2. Add it to the `PHOTOS` list in `scripts/process-hero-assets.py`, with a target long edge around 2.5x its rendered width.
+3. Run the script. It prints each output's dimensions.
+4. Import the `.webp` in `src/content/hero-assets.ts`, set it as a slot's `src`, and copy those dimensions into `width` / `height`.
+5. Write `alt` text describing what the photo actually shows.
+
+Step 4 is not optional. `width` and `height` reserve the box before the image loads, which is what keeps cumulative layout shift at zero.
+
+## Adding a sticker
+
+Same, but add it to `CUTOUTS` instead, and register it in `src/content/hero-graphics.ts` with its position, rotation and entrance delay.
+
+Two things to watch when placing one:
+
+- **Contrast against the ground.** The hero runs from near-black navy in the corners to bright blue low-centre. A dark sticker placed high disappears — this is why `11:11` sits low and `boo` sits high.
+- **`drift` is capped at two.** More than a couple of things moving at once in a still viewport reads as generated.
+
+## If a cutout comes out wrong
+
+Tune `TOLERANCE` in the script. Too low leaves a fringe of background; too high starts eating the artwork's own light edges. A subject photographed against a real scene will not key out at any value — export that one with transparency from the source file instead.

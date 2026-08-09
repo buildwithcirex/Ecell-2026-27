@@ -1,5 +1,4 @@
 import { heroLandingEnd } from '@/content/hero-assets'
-import { LandingEndCharacter } from './graphics/landing-end'
 
 /**
  * A single hand-authored torn edge across a wide viewBox.
@@ -44,20 +43,19 @@ export function PaperTear() {
             so the section ends on solid paper rather than a sliver. */}
         <div className="h-4 w-full bg-paper sm:h-6" />
 
-        <div className="absolute right-[6%] bottom-2 w-16 sm:right-[9%] sm:bottom-3 sm:w-24 lg:w-28">
-          {heroLandingEnd.src ? (
-            <img
-              src={heroLandingEnd.src}
-              alt={heroLandingEnd.alt}
-              width={heroLandingEnd.width}
-              height={heroLandingEnd.height}
-              loading="lazy"
-              decoding="async"
-              className="h-auto w-full"
-            />
-          ) : (
-            <LandingEndCharacter className="w-full text-hero-mid" />
-          )}
+        {/* Sits on the tear line: the artwork's own base lands just below the
+            torn edge, so it reads as resting on the paper rather than floating
+            above it. */}
+        <div className="absolute right-[5%] bottom-1 w-24 sm:right-[8%] sm:bottom-2 sm:w-36 lg:w-44">
+          <img
+            src={heroLandingEnd.src}
+            alt={heroLandingEnd.alt}
+            width={heroLandingEnd.width}
+            height={heroLandingEnd.height}
+            loading="lazy"
+            decoding="async"
+            className="h-auto w-full"
+          />
         </div>
       </div>
     </div>

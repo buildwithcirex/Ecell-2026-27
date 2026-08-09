@@ -8,8 +8,8 @@ export interface LogoProps {
 /**
  * E-Cell mark, fixed to the top-left corner.
  *
- * Falls back to a typographic wordmark while `heroLogo.src` is null. Replacing
- * the placeholder is a one-line edit in the manifest.
+ * The link carries the accessible name, so the image itself is `alt=""`. Giving
+ * both a name would make a screen reader announce "E-Cell" twice.
  */
 export function Logo({ className }: LogoProps) {
   return (
@@ -21,20 +21,13 @@ export function Logo({ className }: LogoProps) {
         className,
       )}
     >
-      {heroLogo.src ? (
-        <img
-          src={heroLogo.src}
-          alt={heroLogo.alt}
-          width={heroLogo.width}
-          height={heroLogo.height}
-          className="h-8 w-auto sm:h-9"
-        />
-      ) : (
-        <span className="font-display text-lg font-extrabold tracking-tight text-cream sm:text-xl">
-          {heroLogo.wordmark}
-          <span className="text-signal">.</span>
-        </span>
-      )}
+      <img
+        src={heroLogo.src}
+        alt=""
+        width={heroLogo.width}
+        height={heroLogo.height}
+        className="h-9 w-auto sm:h-11"
+      />
     </a>
   )
 }

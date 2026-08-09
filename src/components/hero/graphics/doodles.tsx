@@ -53,17 +53,6 @@ export function CoffeeCup({ className }: DoodleProps) {
   )
 }
 
-export function Headphones({ className }: DoodleProps) {
-  return (
-    <svg viewBox="0 0 60 48" className={className} {...stroke}>
-      {/* Headband */}
-      <path d="M7 33V25C7 12.3 17.3 2 30 2s23 10.3 23 23v8" />
-      {/* Ear cups */}
-      <path d="M7 27h4.5c1.9 0 3.5 1.6 3.5 3.5v10c0 1.9-1.6 3.5-3.5 3.5H7c-2.8 0-5-2.2-5-5v-7c0-2.8 2.2-5 5-5Z" />
-      <path d="M53 27h-4.5c-1.9 0-3.5 1.6-3.5 3.5v10c0 1.9 1.6 3.5 3.5 3.5H53c2.8 0 5-2.2 5-5v-7c0-2.8-2.2-5-5-5Z" />
-    </svg>
-  )
-}
 
 export function Sparkle({ className }: DoodleProps) {
   return (
@@ -92,40 +81,3 @@ export function CodeBrackets({ className }: DoodleProps) {
   )
 }
 
-export interface TagBubbleProps extends DoodleProps {
-  /** Short, uppercase. Long strings will overflow the bubble. */
-  label: string
-}
-
-/**
- * Hand-drawn speech bubble with a word in it.
- *
- * The text is SVG `<text>` rather than an HTML overlay so it scales with the
- * bubble instead of needing a matching font-size at every breakpoint.
- */
-export function TagBubble({ label, className }: TagBubbleProps) {
-  return (
-    <svg viewBox="0 0 124 50" className={className}>
-      <path
-        d="M6 13c0-6 4.6-9.4 11-9.4l84.5.8c6.4 0 11.5 3.7 11.5 9.6l-.4 15.6c0 6-4.7 9.5-11 9.5l-56.8-.4-11.6 7.6 3.2-7.6-11.4-.4c-6.4 0-11.4-3.6-11.4-9.6Z"
-        fill="none"
-        stroke="currentColor"
-        strokeWidth={2.5}
-        strokeLinejoin="round"
-      />
-      <text
-        x="61"
-        y="22"
-        textAnchor="middle"
-        dominantBaseline="middle"
-        fill="currentColor"
-        fontFamily="var(--font-display)"
-        fontSize="17"
-        fontWeight="700"
-        letterSpacing="0.06em"
-      >
-        {label}
-      </text>
-    </svg>
-  )
-}
