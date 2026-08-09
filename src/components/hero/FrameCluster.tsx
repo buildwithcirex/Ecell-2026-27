@@ -31,7 +31,7 @@ export function FrameCluster() {
   // The container ignores the pointer so it never sits over the centre column;
   // each frame opts back in so its own hover still fires.
   return (
-    <div className="pointer-events-none absolute inset-0">
+    <div className="pointer-events-none absolute inset-0 z-20">
       {heroPhotos.map((photo, index) => (
         <PhotoFrame
           key={photo.id}

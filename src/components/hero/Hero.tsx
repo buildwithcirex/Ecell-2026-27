@@ -1,4 +1,5 @@
 import { heroStickers } from '@/content/hero-graphics'
+import { WetPaintButton } from '@/components/ui/wet-paint-button'
 import { DoodleGraphic } from './DoodleGraphic'
 import { FrameCluster } from './FrameCluster'
 import { HeroBackground } from './HeroBackground'
@@ -10,10 +11,16 @@ import { Sparkle } from './graphics/doodles'
  *
  * Layers, back to front:
  *   0  ground and faint line art       HeroBackground
- *  10  flank photo scatter             FrameCluster
- *  20  loose stickers                  DoodleGraphic
- *  20  centre column                   headline, description, CTA
- *  30  torn paper edge                 PaperTear
+ *  10  torn paper edge                 PaperTear
+ *  20  flank photo scatter             FrameCluster
+ *  30  loose stickers                  DoodleGraphic
+ *  40  centre column                   headline, description, CTA
+ *
+ * The tear paints under the frames so the bottom photos lie over the paper
+ * rather than being cut off by it. The centre column stays on top of
+ * everything: a frame growing on hover must never cover the copy. That holds
+ * even though a hovered frame raises its own `z-index`, because FrameCluster's
+ * own `z-20` boxes that in to a local stacking context.
  *
  * `min-h-svh` rather than `min-h-screen`: on mobile Safari and Chrome, `100vh`
  * is the viewport with the URL bar hidden, so a `100vh` section is taller than
@@ -28,10 +35,14 @@ export function Hero() {
       <HeroBackground />
       <FrameCluster />
 
-      {/* Six stickers plus one drawn accent. Hidden below `md` for the same
-          reason the inner frames are: a 375px viewport has no gutter to put
-          them in without crowding the headline. */}
-      <div className="pointer-events-none absolute inset-0 z-20 hidden md:block">
+      {/* Six stickers plus one drawn accent.
+
+          Held back until `lg`, not `md`. The copy column is capped at 46ch, so
+          on a 768px tablet it spans almost the full width and the side gutters
+          are narrower than a sticker: every placement measured as an overlap on
+          the headline or the description. At 1024 the gutters are wide enough
+          for them to sit clear. */}
+      <div className="pointer-events-none absolute inset-0 z-30 hidden lg:block">
         {heroStickers.map((sticker) => (
           <DoodleGraphic
             key={sticker.id}
@@ -59,8 +70,8 @@ export function Hero() {
         {/* The one element in the section that is Signal, and the only drawn
             mark left in the foreground. It ties the stickers to the CTA. */}
         <DoodleGraphic
-          top={27}
-          left={44}
+          top={16}
+          left={40}
           delay={680}
           width="clamp(0.9rem, 1.3vw, 1.4rem)"
           className="pointer-events-auto text-signal"
@@ -70,7 +81,7 @@ export function Hero() {
       </div>
 
       {/* Centre column */}
-      <div className="relative z-20 flex w-full max-w-3xl flex-col items-center text-center">
+      <div className="relative z-40 flex w-full max-w-3xl flex-col items-center text-center">
         <h1
           id="hero-heading"
           // The 3.25rem floor is the largest that still fits "Build That" on one
@@ -90,13 +101,13 @@ export function Hero() {
           hackathons, mentorship, and visible outcomes.
         </p>
 
-        <a
+        <WetPaintButton
           href="#work"
-          className="hero-rise mt-8 inline-flex h-12 items-center justify-center rounded-full bg-signal px-8 font-body text-sm font-semibold text-ink transition-transform duration-instant ease-mech hover:-translate-y-0.5 sm:mt-10 sm:h-13 sm:text-base"
+          className="hero-rise mt-8 sm:mt-10"
           style={{ ['--rise-delay' as string]: '160ms' }}
         >
           Explore our Work
-        </a>
+        </WetPaintButton>
       </div>
 
       <PaperTear />

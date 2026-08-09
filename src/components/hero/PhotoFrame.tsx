@@ -41,10 +41,10 @@ export function PhotoFrame({ photo, delay, className }: PhotoFrameProps) {
     // Consumed by `.hero-frame` in index.css.
     ['--frame-rot' as string]: `${photo.rotate}deg`,
     ['--frame-delay' as string]: `${delay}ms`,
-    // The floor drops to 5rem so the tier-0 corner frames stay a modest accent
-    // on a phone; the vw term and ceiling are unchanged, so nothing shifts on a
-    // desktop.
-    width: `calc(${photo.scale} * clamp(5rem, 9.5vw, 12rem))`,
+    // Base width for the whole scatter. The floor stays modest so the tier-0
+    // corner frames do not swamp a phone; the vw term and ceiling drive the
+    // desktop size. Raise these two to scale every frame at once.
+    width: `calc(${photo.scale} * clamp(5.5rem, 13vw, 17rem))`,
   }
 
   return (

@@ -22,8 +22,11 @@ const TEAR_PATH =
  */
 export function PaperTear() {
   return (
-    <div aria-hidden="true" className="absolute inset-x-0 bottom-0 z-30">
-      <div className="relative">
+    // No z-index on the wrapper, so it creates no stacking context and the two
+    // children below can each take their own place against the photo scatter's
+    // z-20: the tear paints under the frames, the character paints over them.
+    <div aria-hidden="true" className="absolute inset-x-0 bottom-0">
+      <div className="relative z-10">
         <svg
           viewBox="0 0 1440 90"
           preserveAspectRatio="none"
@@ -42,21 +45,29 @@ export function PaperTear() {
         {/* The tear only covers the bottom strip; this fills everything below it
             so the section ends on solid paper rather than a sliver. */}
         <div className="h-4 w-full bg-paper sm:h-6" />
+      </div>
 
-        {/* Sits on the tear line: the artwork's own base lands just below the
-            torn edge, so it reads as resting on the paper rather than floating
-            above it. */}
-        <div className="absolute right-[5%] bottom-1 w-24 sm:right-[8%] sm:bottom-2 sm:w-36 lg:w-44">
-          <img
-            src={heroLandingEnd.src}
-            alt={heroLandingEnd.alt}
-            width={heroLandingEnd.width}
-            height={heroLandingEnd.height}
-            loading="lazy"
-            decoding="async"
-            className="h-auto w-full"
-          />
-        </div>
+      {/* Sits on the tear line: the artwork's own base lands just below the
+          torn edge, so it reads as resting on the paper rather than floating
+          above it. At z-30 it clears the photo scatter, which otherwise buries
+          it now that it is this large.
+
+          Small and hard right under `sm`, because that is exactly the range
+          where the navbar is a centred floating bar along the bottom. At its
+          desktop size it would sit straight on top of the nav; pinned to the
+          right edge at `w-20` it clears it. From `sm` up the nav moves to the
+          top of the screen and the whole bottom strip is free, so it scales up
+          hard from there. */}
+      <div className="absolute right-0 bottom-1 z-30 w-20 sm:right-[3%] sm:bottom-2 sm:w-48 md:w-64 lg:w-80 xl:w-96">
+        <img
+          src={heroLandingEnd.src}
+          alt={heroLandingEnd.alt}
+          width={heroLandingEnd.width}
+          height={heroLandingEnd.height}
+          loading="lazy"
+          decoding="async"
+          className="h-auto w-full"
+        />
       </div>
     </div>
   )

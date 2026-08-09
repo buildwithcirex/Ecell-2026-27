@@ -18,7 +18,7 @@ export interface NavBarProps {
 }
 
 /**
- * Pill navigation with a tube-light indicator that slides between items.
+ * Rounded bar with a tube light over the active item.
  *
  * Sits as a bottom bar under `sm` and a top bar above it, so the thumb reaches
  * it on a phone and it reads as a masthead on a desktop.
@@ -36,17 +36,15 @@ export function NavBar({ items, className, ariaLabel = 'Primary' }: NavBarProps)
     <nav
       aria-label={ariaLabel}
       className={cn(
-        // `sm:pt-7` is not arbitrary breathing room: the tube's blurs reach
-        // about 23px above the pill, and anything less clips the glow against
-        // the top of the viewport.
-        'fixed bottom-0 left-1/2 z-50 mb-6 h-max -translate-x-1/2 sm:top-0 sm:mb-0 sm:pt-7',
+        // The tube's glow reaches roughly 26px above the bar, so the padding
+        // above it has to clear that or the halo clips against the viewport.
+        'fixed bottom-0 left-1/2 z-50 mb-5 h-max -translate-x-1/2 sm:top-0 sm:mb-0 sm:pt-8',
         className,
       )}
     >
-      {/* Solid fill, not `backdrop-blur`. The pill has to separate from a ground
-          that is nearly the same navy, so it steps one value lighter and carries
-          a hairline. */}
-      <ul className="flex items-center gap-1 rounded-full border border-white/12 bg-hero-mid p-1 sm:gap-2">
+      {/* Solid fill, not `backdrop-blur`. The bar has to separate from a ground
+          that is nearly the same navy, so it carries a hairline. */}
+      <ul className="flex items-center gap-1 rounded-2xl border border-white/10 bg-hero-deep p-2">
         {items.map((item) => {
           const Icon = item.icon
           const isActive = activeTab === item.name
@@ -58,9 +56,8 @@ export function NavBar({ items, className, ariaLabel = 'Primary' }: NavBarProps)
                 aria-current={isActive ? 'page' : undefined}
                 onClick={() => setActiveTab(item.name)}
                 className={cn(
-                  'relative block cursor-pointer rounded-full px-5 py-2 text-sm font-medium transition-colors duration-instant sm:px-6',
-                  'text-cream/70 hover:text-cream',
-                  isActive && 'text-cream',
+                  'relative block cursor-pointer rounded-xl px-5 py-2.5 text-sm font-semibold transition-colors duration-instant sm:px-7',
+                  isActive ? 'text-cream' : 'text-cream/55 hover:text-cream/85',
                 )}
               >
                 <span className="hidden md:inline">{item.name}</span>
@@ -75,21 +72,25 @@ export function NavBar({ items, className, ariaLabel = 'Primary' }: NavBarProps)
                   <motion.span
                     layoutId="navbar-tube"
                     aria-hidden="true"
-                    className="absolute inset-0 -z-10 w-full rounded-full bg-white/8"
+                    className="absolute inset-0 -z-10 rounded-xl bg-white/14"
                     initial={false}
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                   >
-                    {/* The tube itself: a bar on the leading edge with three
-                        stacked blurs standing in for its falloff. On the bottom
-                        bar it hangs under the pill, on the top bar it caps it. */}
-                    <span className="absolute -top-[3px] left-1/2 hidden h-[3px] w-8 -translate-x-1/2 rounded-b-full bg-signal sm:block">
-                      <span className="absolute -top-2 -left-2 h-6 w-12 rounded-full bg-signal/25 blur-md" />
-                      <span className="absolute -top-1 h-6 w-8 rounded-full bg-signal/25 blur-md" />
-                      <span className="absolute top-0 left-2 h-4 w-4 rounded-full bg-signal/25 blur-sm" />
+                    {/* The tube: a bright bar on the leading edge with three
+                        stacked blurs standing in for its falloff.
+
+                        The glow spills *inward*, away from the edge, which is
+                        both how a real tube throws light onto the surface below
+                        it and what keeps the halo from clipping against the top
+                        of the viewport. */}
+                    <span className="absolute -top-[10px] left-1/2 hidden h-[3px] w-11 -translate-x-1/2 rounded-full bg-cream sm:block">
+                      <span className="absolute top-0 -left-3 h-6 w-[4.25rem] rounded-full bg-cream/25 blur-md" />
+                      <span className="absolute top-0 -left-1 h-5 w-[3.25rem] rounded-full bg-cream/30 blur-md" />
+                      <span className="absolute top-0 left-2 h-3 w-7 rounded-full bg-cream/45 blur-sm" />
                     </span>
-                    <span className="absolute -bottom-[3px] left-1/2 h-[3px] w-8 -translate-x-1/2 rounded-t-full bg-signal sm:hidden">
-                      <span className="absolute -top-4 -left-2 h-6 w-12 rounded-full bg-signal/25 blur-md" />
-                      <span className="absolute -top-3 h-6 w-8 rounded-full bg-signal/25 blur-md" />
+                    <span className="absolute -bottom-[10px] left-1/2 h-[3px] w-10 -translate-x-1/2 rounded-full bg-cream sm:hidden">
+                      <span className="absolute bottom-0 -left-3 h-6 w-16 rounded-full bg-cream/25 blur-md" />
+                      <span className="absolute bottom-0 -left-1 h-5 w-12 rounded-full bg-cream/30 blur-md" />
                     </span>
                   </motion.span>
                 )}

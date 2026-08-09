@@ -27,10 +27,9 @@ Three things happen here.
 2. TRIM to the remaining content, so a graphic's box is the artwork rather than
    the artwork plus a margin of dead transparency.
 
-3. RESIZE AND ENCODE to WebP at roughly 2.5x the largest size each asset is ever
-   rendered at. The team photos arrive around 1.2MB each and render between 80
-   and 240px wide; shipping them untouched would be about 20MB of PNG for a
-   single viewport.
+3. RESIZE AND ENCODE to WebP at roughly 2x the largest size each asset is ever
+   rendered at, so it stays sharp on a high-density display. The originals total
+   19MB; the derivatives total about 810KB.
 """
 
 from __future__ import annotations
@@ -135,8 +134,9 @@ def save(im: Image.Image, name: str, *, lossless: bool = False) -> tuple[str, in
 # ---------------------------------------------------------------------------
 # Jobs
 #
-# `long_edge` is about 2.5x the widest that asset is ever rendered, which covers
-# a 2x display at the largest breakpoint without shipping a print-resolution file.
+# `long_edge` is about 2x the largest size that asset is ever rendered at, which
+# keeps it sharp on a high-density display without shipping a print-res file.
+# Raise a number here whenever you raise that slot's `scale` in the manifest.
 # ---------------------------------------------------------------------------
 
 CUTOUTS = [
@@ -147,26 +147,26 @@ CUTOUTS = [
     ("graphic-4.png", "graphic-1111", 360),
     ("graphic-5.png", "graphic-email-finds-you", 360),
     ("graphic-6.png", "graphic-boo", 360),
-    ("landing-end.png", "landing-end", 460),
+    ("landing-end.png", "landing-end", 800),
 ]
 
 # Already has real transparency, so it only needs resizing. Lossless keeps the
 # mark's edges crisp at small sizes, and it is tiny either way.
 LOGO = ("ecell-logo.png", "ecell-logo", 160)
 
-# Photos go inside frames, so they keep their own background. Sized per slot:
-# the manifest renders each at `scale * up to 192px`, so 2.5x that is plenty.
+# Photos go inside frames, so they keep their own background. Sized per slot
+# from `scale * up to 17rem`, the frame ceiling set in `PhotoFrame.tsx`.
 PHOTOS = [
-    ("team/team-1.png", "team-1", 600),
-    ("team/team-2.png", "team-2", 420),
-    ("team/team-3.png", "team-3", 640),
-    ("team/team-4.png", "team-4", 400),
-    ("team/team-5.png", "team-5", 480),
-    ("team/team-6.png", "team-6", 600),
-    ("team/team-7.png", "team-7", 420),
-    ("team/team-8.png", "team-8", 620),
-    ("team/team-9.png", "team-9", 400),
-    ("team/team-10.png", "team-10", 520),
+    ("team/team-1.png", "team-1", 1120),
+    ("team/team-2.png", "team-2", 680),
+    ("team/team-3.png", "team-3", 520),
+    ("team/team-4.png", "team-4", 710),
+    ("team/team-5.png", "team-5", 820),
+    ("team/team-6.png", "team-6", 850),
+    ("team/team-7.png", "team-7", 920),
+    ("team/team-8.png", "team-8", 1060),
+    ("team/team-9.png", "team-9", 1120),
+    ("team/team-10.png", "team-10", 1260),
 ]
 
 
