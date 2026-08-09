@@ -4,10 +4,50 @@
     <meta charset="UTF-8" />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>ecell-2026-27</title>
+    <meta name="theme-color" content="#060c1c" />
+    <meta
+      name="description"
+      content="E-Cell helps students move from intent to execution through ventures, hackathons, mentorship, and visible outcomes."
+    />
+    <title>E-Cell</title>
   </head>
   <body>
     <div id="root"></div>
+    <!--
+      This is a client-rendered Vite app, so #root is empty until React mounts.
+      Without a server-rendered pass there is nothing to progressively enhance,
+      and the honest fallback is to state the same thing the hero states rather
+      than serve a blank page. Styles are inline so this holds up even if the
+      stylesheet has not arrived.
+    -->
+    <noscript>
+      <div
+        style="
+          min-height: 100vh;
+          display: flex;
+          flex-direction: column;
+          align-items: center;
+          justify-content: center;
+          gap: 1rem;
+          padding: 2rem 1.25rem;
+          text-align: center;
+          background: #060c1c;
+          color: #f5eee1;
+          font-family: ui-sans-serif, system-ui, sans-serif;
+        "
+      >
+        <h1 style="margin: 0; font-size: clamp(2.5rem, 9vw, 6rem); line-height: 0.9">
+          Build That<br />Shit
+        </h1>
+        <p style="margin: 0; max-width: 46ch; color: #c8d6ee; line-height: 1.6">
+          We help students move from intent to execution through ventures,
+          hackathons, mentorship, and visible outcomes.
+        </p>
+        <p style="margin: 0; color: #c8d6ee; font-size: 0.875rem">
+          Enable JavaScript to view the full page.
+        </p>
+      </div>
+    </noscript>
     <script type="module" src="/src/main.tsx"></script>
   </body>
 </html>

@@ -1,0 +1,308 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Typefaces
+
+   Self-hosted, latin and latin-ext only. Fontsource's own index.css also ships
+   cyrillic and vietnamese subsets, which would be emitted into the bundle and
+   never downloaded. Declaring the two subsets we need keeps the font payload at
+   roughly 106KB across both families.
+   --------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Bricolage Grotesque Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-ext-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Geist Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("@fontsource-variable/geist/files/geist-latin-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Geist Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("@fontsource-variable/geist/files/geist-latin-ext-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ---------------------------------------------------------------------------
+   Tokens
+
+   Every colour, duration and easing in the hero resolves to one of these. No
+   component hardcodes a hex or a millisecond value.
+   --------------------------------------------------------------------------- */
+
+@theme {
+  /* Hero ground, sampled from the Canva mock: near-black navy in the corners
+     resolving to a brighter blue low-centre. */
+  --color-hero-deep: #060c1c;
+  --color-hero-mid: #0c1c3f;
+  --color-hero-blue: #16408a;
+  --color-hero-bright: #2468cc;
+
+  /* Foreground */
+  --color-cream: #f5eee1;
+  --color-paper: #faf7f0;
+  --color-ink: #0b1120;
+  /* Light enough to clear 4.5:1 against the brightest part of the wash, which
+     is where the description sits. The obvious mid-blue-grey does not. */
+  --color-steel: #c8d6ee;
+  --color-signal: #ff5a24;
+  /* The back sheet showing through behind the torn edge. */
+  --color-tear-shadow: #d5cdbc;
+
+  --font-display: "Bricolage Grotesque Variable", "Trebuchet MS", sans-serif;
+  --font-body: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* Smaller than Tailwind's `text-xs`. Used only for the tracked uppercase
+     label inside a placeholder frame. */
+  --text-micro: 0.5rem;
+
+  /* The frames are paper sitting on a dark ground. The shadow is the cue that
+     says so, and it is the only shadow in the section. */
+  --shadow-frame: 0 10px 30px rgb(3 8 20 / 0.45);
+
+  --ease-mech: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Namespaced `--transition-duration-*`, not `--duration-*`: that is the key
+     Tailwind v4 resolves for its `duration-*` utilities. Naming them this way
+     means one declaration serves both the utility and `var()` in the rules
+     below, instead of the two drifting apart. */
+  --transition-duration-instant: 120ms;
+  --transition-duration-quick: 180ms;
+  --transition-duration-base: 620ms;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-hero-deep);
+    color: var(--color-cream);
+    font-family: var(--font-body);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    /* `clip` rather than `hidden`: it suppresses stray horizontal overflow from
+       the rotated frames without turning body into a scroll container. */
+    overflow-x: clip;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-signal);
+    color: var(--color-paper);
+  }
+
+  img,
+  svg {
+    display: block;
+  }
+
+  /* `max-width: 100%` deliberately does NOT extend to `svg`. An icon with fixed
+     width and height inside a shrink-to-fit parent resolves its percentage
+     against a width that its own content defines, the two collapse into each
+     other, and the icon renders as a 1px sliver. Every SVG here is sized by an
+     explicit width utility, so none of them need the clamp. */
+  img {
+    max-width: 100%;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Hero motion
+
+   Transform and opacity only, so every animation stays on the compositor.
+   Per-element rotation and delay arrive as custom properties set inline, which
+   keeps the scatter data-driven instead of hardcoded in a stylesheet.
+
+   Every entrance below fills `backwards`, never `both`. A filled-forwards
+   animation keeps applying its final keyframe, and animations outrank normal
+   declarations in the cascade, so `both` would leave the `to { transform }`
+   pinned on the element and no `:hover` transform could ever win. `backwards`
+   covers the delay and then releases, handing the element back to its own
+   rules once the entrance is done.
+   --------------------------------------------------------------------------- */
+
+@layer components {
+  /* Scattered photo frames -------------------------------------------------- */
+
+  .hero-frame {
+    --frame-rot: 0deg;
+    --frame-delay: 0ms;
+    transform: rotate(var(--frame-rot));
+    transition:
+      transform var(--transition-duration-quick) var(--ease-mech),
+      box-shadow var(--transition-duration-quick) var(--ease-mech);
+    animation: frame-in var(--transition-duration-base) var(--ease-out) backwards;
+    animation-delay: var(--frame-delay);
+  }
+
+  .hero-frame:hover,
+  .hero-frame:focus-within {
+    transform: rotate(0deg) translateY(-10px) scale(1.06);
+    z-index: 30;
+  }
+
+  @keyframes frame-in {
+    from {
+      opacity: 0;
+      transform: rotate(var(--frame-rot)) translateY(18px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: rotate(var(--frame-rot));
+    }
+  }
+
+  /* Loose doodle graphics --------------------------------------------------- */
+
+  .hero-graphic {
+    --graphic-rot: 0deg;
+    --graphic-delay: 0ms;
+    transform: rotate(var(--graphic-rot));
+    transition: transform var(--transition-duration-instant) var(--ease-mech);
+    animation: graphic-in var(--transition-duration-base) var(--ease-out) backwards;
+    animation-delay: var(--graphic-delay);
+  }
+
+  .hero-graphic:hover {
+    transform: rotate(calc(var(--graphic-rot) + 6deg)) translateY(-6px)
+      scale(1.12);
+  }
+
+  @keyframes graphic-in {
+    from {
+      opacity: 0;
+      transform: rotate(var(--graphic-rot)) scale(0.7);
+    }
+    to {
+      opacity: 1;
+      transform: rotate(var(--graphic-rot));
+    }
+  }
+
+  /* Idle drift. Lives on an inner wrapper rather than on .hero-graphic itself,
+     so it owns translateY while the parent owns rotate and scale. Stacking them
+     on one element would put two animations on the same transform property and
+     the hover bounce would never render.
+
+     Applied to exactly two graphics: more than a couple of things moving at
+     once in a still viewport reads as generated. */
+  .hero-drift {
+    animation: drift 6s ease-in-out 900ms infinite;
+  }
+
+  .hero-graphic:hover .hero-drift {
+    animation-play-state: paused;
+  }
+
+  @keyframes drift {
+    0%,
+    100% {
+      transform: translateY(-4px);
+    }
+    50% {
+      transform: translateY(4px);
+    }
+  }
+
+  /* Centre column ----------------------------------------------------------- */
+
+  /* The headline itself is never animated: it is the LCP element and renders at
+     final opacity. Only the supporting copy and CTA fade up. */
+  .hero-rise {
+    --rise-delay: 0ms;
+    animation: rise var(--transition-duration-base) var(--ease-out) backwards;
+    animation-delay: var(--rise-delay);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Reduced motion
+
+   Functional requirement, not a nicety. Everything lands in its final state,
+   the hover lift degrades to a border colour change, and SmoothScroll never
+   constructs Lenis.
+   --------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hero-frame:hover,
+  .hero-frame:focus-within {
+    transform: rotate(var(--frame-rot));
+    box-shadow: none;
+  }
+
+  .hero-graphic:hover {
+    transform: rotate(var(--graphic-rot));
+  }
+
+  .hero-drift {
+    animation: none;
+  }
+}
