@@ -5,17 +5,26 @@ import { cn } from '@/lib/utils'
 /**
  * Each drip's horizontal offset, width and resting length, plus how far it
  * stretches on hover. Hand-set rather than generated: evenly spaced drips of
- * equal length read as a decorative border, and uneven ones read as paint.
+ * equal length read as a decorative border, uneven ones read as paint.
  *
  * They stay inside the middle of the button. A drip out at the very edge would
- * hang off the button's corner radius and float free of it.
+ * hang off the corner radius and float free of the body.
  */
 const DRIPS = [
-  { left: '14%', w: '0.7rem', h: '0.75rem', grow: '0.5rem' },
-  { left: '31%', w: '1rem', h: '1.4rem', grow: '0.85rem' },
-  { left: '52%', w: '0.55rem', h: '0.55rem', grow: '0.35rem' },
-  { left: '68%', w: '0.85rem', h: '1.1rem', grow: '0.7rem' },
-  { left: '84%', w: '0.6rem', h: '0.85rem', grow: '0.45rem' },
+  { left: '13%', w: '0.8rem', h: '0.9rem', grow: '0.7rem' },
+  { left: '29%', w: '1.15rem', h: '1.6rem', grow: '1.15rem' },
+  { left: '46%', w: '0.6rem', h: '0.6rem', grow: '0.45rem' },
+  { left: '63%', w: '0.95rem', h: '1.25rem', grow: '0.95rem' },
+  { left: '82%', w: '0.7rem', h: '1rem', grow: '0.6rem' },
+] as const
+
+/**
+ * Two drops on different cycles and offsets. One drop on a loop reads as a
+ * repeating animation; two out of phase read as paint that keeps running.
+ */
+const DROPS = [
+  { x: '29%', fall: '3.6s', delay: '0s' },
+  { x: '63%', fall: '4.9s', delay: '1.6s' },
 ] as const
 
 export interface WetPaintButtonProps {
@@ -26,10 +35,12 @@ export interface WetPaintButtonProps {
 }
 
 /**
- * Solid button with paint dripping off its bottom edge.
+ * Solid button with wet paint running off its bottom edge.
  *
- * The drips and the falling drop are decorative, so they are hidden from
- * assistive tech and take no pointer events; only the label is the link.
+ * The paint layer is filtered and the label is not, so the text stays crisp
+ * while the shapes below it fuse. Everything but the label is decorative:
+ * hidden from assistive tech, and inert to the pointer so it never intercepts
+ * the click.
  *
  * The drips respond to `:focus-visible` as well as `:hover`, so the effect is
  * not mouse-only.
@@ -44,17 +55,54 @@ export function WetPaintButton({
     <a
       href={href}
       className={cn(
-        'wet-btn h-12 rounded-2xl px-8 font-body text-sm font-bold sm:h-13 sm:text-base',
+        'wet-btn h-12 rounded-2xl px-8 font-display text-base font-bold tracking-tight sm:h-14 sm:px-10 sm:text-lg',
         className,
       )}
       style={style}
     >
-      {children}
+      {/*
+        The gooey filter. `stdDeviation` sets how far apart two shapes can be
+        and still fuse; the alpha row of the colour matrix (18, -7) is the
+        contrast curve that snaps the blurred edges back to something solid.
+        Without that second step this is just a blur.
 
-      <span className="wet-btn__drips" aria-hidden="true">
+        The filter region is widened to 200% so a falling drop is not clipped
+        at the edge of the default region on its way down.
+      */}
+      <svg
+        aria-hidden="true"
+        focusable="false"
+        className="pointer-events-none absolute h-0 w-0"
+      >
+        <defs>
+          <filter
+            id="wet-goo"
+            x="-50%"
+            y="-50%"
+            width="200%"
+            height="200%"
+            colorInterpolationFilters="sRGB"
+          >
+            <feGaussianBlur in="SourceGraphic" stdDeviation="3.5" result="blur" />
+            <feColorMatrix
+              in="blur"
+              mode="matrix"
+              values="1 0 0 0 0
+                      0 1 0 0 0
+                      0 0 1 0 0
+                      0 0 0 18 -7"
+            />
+          </filter>
+        </defs>
+      </svg>
+
+      <span className="wet-btn__paint" aria-hidden="true">
+        <span className="wet-btn__body" />
+
         {DRIPS.map((drip) => (
-          <i
+          <span
             key={drip.left}
+            className="wet-btn__drip"
             style={
               {
                 left: drip.left,
@@ -65,13 +113,24 @@ export function WetPaintButton({
             }
           />
         ))}
+
+        {DROPS.map((drop) => (
+          <span
+            key={drop.x}
+            className="wet-btn__drop"
+            style={
+              {
+                '--drop-x': drop.x,
+                '--fall': drop.fall,
+                '--fall-delay': drop.delay,
+              } as CSSProperties
+            }
+          />
+        ))}
       </span>
 
-      <span
-        className="wet-btn__drop"
-        aria-hidden="true"
-        style={{ '--drop-x': '33%' } as CSSProperties}
-      />
+      <span className="wet-btn__gloss" aria-hidden="true" />
+      <span className="wet-btn__label">{children}</span>
     </a>
   )
 }

@@ -38,7 +38,7 @@ export function NavBar({ items, className, ariaLabel = 'Primary' }: NavBarProps)
       className={cn(
         // The tube's glow reaches roughly 26px above the bar, so the padding
         // above it has to clear that or the halo clips against the viewport.
-        'fixed bottom-0 left-1/2 z-50 mb-5 h-max -translate-x-1/2 sm:top-0 sm:mb-0 sm:pt-8',
+        'fixed bottom-0 left-1/2 z-50 mb-5 h-max -translate-x-1/2 sm:top-0 sm:mb-0 sm:pt-9',
         className,
       )}
     >
@@ -56,7 +56,7 @@ export function NavBar({ items, className, ariaLabel = 'Primary' }: NavBarProps)
                 aria-current={isActive ? 'page' : undefined}
                 onClick={() => setActiveTab(item.name)}
                 className={cn(
-                  'relative block cursor-pointer rounded-xl px-5 py-2.5 text-sm font-semibold transition-colors duration-instant sm:px-7',
+                  'relative block cursor-pointer rounded-xl px-3.5 py-2.5 font-display text-[0.95rem] font-bold tracking-tight transition-colors duration-instant sm:px-7 sm:text-base',
                   isActive ? 'text-cream' : 'text-cream/55 hover:text-cream/85',
                 )}
               >
@@ -72,7 +72,7 @@ export function NavBar({ items, className, ariaLabel = 'Primary' }: NavBarProps)
                   <motion.span
                     layoutId="navbar-tube"
                     aria-hidden="true"
-                    className="absolute inset-0 -z-10 rounded-xl bg-white/14"
+                    className="absolute inset-0 -z-10 rounded-xl bg-white/18"
                     initial={false}
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                   >
@@ -83,14 +83,18 @@ export function NavBar({ items, className, ariaLabel = 'Primary' }: NavBarProps)
                         both how a real tube throws light onto the surface below
                         it and what keeps the halo from clipping against the top
                         of the viewport. */}
-                    <span className="absolute -top-[10px] left-1/2 hidden h-[3px] w-11 -translate-x-1/2 rounded-full bg-cream sm:block">
-                      <span className="absolute top-0 -left-3 h-6 w-[4.25rem] rounded-full bg-cream/25 blur-md" />
-                      <span className="absolute top-0 -left-1 h-5 w-[3.25rem] rounded-full bg-cream/30 blur-md" />
-                      <span className="absolute top-0 left-2 h-3 w-7 rounded-full bg-cream/45 blur-sm" />
+                    <span className="absolute -top-[11px] left-1/2 hidden h-[3.5px] w-14 -translate-x-1/2 rounded-full bg-cream sm:block">
+                      {/* Halo above the tube, then falloff onto the bar below
+                          it. Both directions are bounded by the nav's top
+                          padding, so neither clips against the viewport. */}
+                      <span className="absolute -top-3 left-1/2 h-8 w-24 -translate-x-1/2 rounded-full bg-cream/20 blur-lg" />
+                      <span className="absolute -top-1.5 left-1/2 h-6 w-20 -translate-x-1/2 rounded-full bg-cream/30 blur-md" />
+                      <span className="absolute top-0 left-1/2 h-5 w-14 -translate-x-1/2 rounded-full bg-cream/45 blur-md" />
+                      <span className="absolute top-0 left-1/2 h-2.5 w-9 -translate-x-1/2 rounded-full bg-cream/60 blur-sm" />
                     </span>
-                    <span className="absolute -bottom-[10px] left-1/2 h-[3px] w-10 -translate-x-1/2 rounded-full bg-cream sm:hidden">
-                      <span className="absolute bottom-0 -left-3 h-6 w-16 rounded-full bg-cream/25 blur-md" />
-                      <span className="absolute bottom-0 -left-1 h-5 w-12 rounded-full bg-cream/30 blur-md" />
+                    <span className="absolute -bottom-[11px] left-1/2 h-[3.5px] w-12 -translate-x-1/2 rounded-full bg-cream sm:hidden">
+                      <span className="absolute -bottom-3 left-1/2 h-8 w-20 -translate-x-1/2 rounded-full bg-cream/20 blur-lg" />
+                      <span className="absolute bottom-0 left-1/2 h-5 w-14 -translate-x-1/2 rounded-full bg-cream/40 blur-md" />
                     </span>
                   </motion.span>
                 )}

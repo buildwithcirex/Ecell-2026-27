@@ -49,6 +49,54 @@ export function CircuitBoard({ className }: DoodleProps) {
   )
 }
 
+export function Rocket({ className }: DoodleProps) {
+  return (
+    <svg viewBox="0 0 96 132" className={className} {...stroke}>
+      {/* Body */}
+      <path d="M48 4c13 12 20 28 20 46v34H28V50C28 32 35 16 48 4Z" />
+      {/* Fins */}
+      <path d="M28 58 12 74v26l16-12ZM68 58l16 16v26L68 88Z" />
+      {/* Window */}
+      <circle cx="48" cy="46" r="10" />
+      {/* Exhaust */}
+      <path d="M38 92c3 8 6 14 10 22 4-8 7-14 10-22" />
+      <path d="M44 96c1 6 2 10 4 15 2-5 3-9 4-15" opacity="0.6" />
+    </svg>
+  )
+}
+
+export function Target({ className }: DoodleProps) {
+  return (
+    <svg viewBox="0 0 116 116" className={className} {...stroke}>
+      <circle cx="54" cy="62" r="46" />
+      <circle cx="54" cy="62" r="30" />
+      <circle cx="54" cy="62" r="14" />
+      {/* Arrow struck slightly off centre, because a dead-centre hit reads as
+          a logo rather than a drawing. */}
+      <path d="M62 54 108 8" />
+      <path d="M94 8h14v14" />
+      <path d="m62 54-9 3 3-9" />
+    </svg>
+  )
+}
+
+export function GrowthChart({ className }: DoodleProps) {
+  return (
+    <svg viewBox="0 0 140 108" className={className} {...stroke}>
+      {/* Axes */}
+      <path d="M14 6v92h122" />
+      {/* Bars of increasing height */}
+      <path d="M34 98V74M60 98V56M86 98V62M112 98V32" />
+      {/* Trend line with a node at each bar */}
+      <path d="m30 82 26-24 26 8 30-32" opacity="0.75" />
+      <circle cx="30" cy="82" r="4" />
+      <circle cx="56" cy="58" r="4" />
+      <circle cx="82" cy="66" r="4" />
+      <circle cx="112" cy="34" r="4" />
+    </svg>
+  )
+}
+
 export function Notebook({ className }: DoodleProps) {
   return (
     <svg viewBox="0 0 140 168" className={className} {...stroke}>

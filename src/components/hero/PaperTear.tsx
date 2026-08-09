@@ -58,7 +58,7 @@ export function PaperTear() {
           right edge at `w-20` it clears it. From `sm` up the nav moves to the
           top of the screen and the whole bottom strip is free, so it scales up
           hard from there. */}
-      <div className="absolute right-0 bottom-1 z-30 w-20 sm:right-[3%] sm:bottom-2 sm:w-48 md:w-64 lg:w-80 xl:w-96">
+      <div className="absolute right-0 bottom-1 z-30 w-28 sm:right-[3%] sm:bottom-2 sm:w-48 md:w-64 lg:w-80 xl:w-96">
         <img
           src={heroLandingEnd.src}
           alt={heroLandingEnd.alt}

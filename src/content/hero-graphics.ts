@@ -33,6 +33,20 @@ export interface HeroSticker {
   readonly width_css: string
   /** Slow idle float. Deliberately true for only two stickers. */
   readonly drift?: boolean
+  /**
+   * Placement for the narrow layout, under `lg`.
+   *
+   * Only a couple of stickers carry one. Below `lg` the copy column spans
+   * almost the full width, so the only clear ground is the horizontal band
+   * above the headline and the one between the CTA and the torn edge. These
+   * percentages sit in those bands and hold from 375px through 1024px.
+   */
+  readonly narrow?: {
+    readonly top: number
+    readonly left?: number
+    readonly right?: number
+    readonly width_css: string
+  }
 }
 
 /**
@@ -54,6 +68,7 @@ export const heroStickers: readonly HeroSticker[] = [
     delay: 320,
     width_css: 'clamp(5rem, 8vw, 8.5rem)',
     drift: true,
+    narrow: { top: 11, left: 21, width_css: 'clamp(4.5rem, 17vw, 8rem)' },
   },
   {
     id: 'ecell-again',
@@ -99,6 +114,7 @@ export const heroStickers: readonly HeroSticker[] = [
     rotate: 10,
     delay: 560,
     width_css: 'clamp(3.25rem, 5.5vw, 6rem)',
+    narrow: { top: 76, right: 24, width_css: 'clamp(3.25rem, 13vw, 6rem)' },
   },
   {
     id: 'email-finds-you',

@@ -1,4 +1,10 @@
-import { CircuitBoard, Notebook } from './graphics/backdrop'
+import {
+  CircuitBoard,
+  GrowthChart,
+  Notebook,
+  Rocket,
+  Target,
+} from './graphics/backdrop'
 import {
   CodeBrackets,
   CoffeeCup,
@@ -40,6 +46,12 @@ export function HeroBackground() {
         <CodeBrackets className="absolute top-[14%] left-[19%] hidden w-[7vw] opacity-9 lg:block" />
         <Sparkle className="absolute top-[20%] left-[68%] hidden w-[2.4vw] opacity-12 md:block" />
         <Sparkle className="absolute top-[70%] left-[31%] hidden w-[1.8vw] opacity-12 lg:block" />
+
+        {/* Three more marks so the ground is not empty between the flanks and
+            the copy. Each is anchored to a band the frames do not reach. */}
+        <Rocket className="absolute top-[58%] left-[59%] hidden w-[7vw] opacity-10 md:block" />
+        <Target className="absolute top-[16%] left-[45%] hidden w-[9vw] opacity-8 lg:block" />
+        <GrowthChart className="absolute top-[74%] left-[44%] hidden w-[11vw] opacity-9 md:block" />
       </div>
     </div>
   )

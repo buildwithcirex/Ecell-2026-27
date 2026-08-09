@@ -80,6 +80,37 @@ export function Hero() {
         </DoodleGraphic>
       </div>
 
+      {/* The narrow layout keeps two of the stickers, placed in the bands above
+          the headline and below the CTA. Under `lg` those are the only strips
+          of ground the copy leaves clear, so this is a separate layer rather
+          than the same one repositioned. */}
+      <div className="pointer-events-none absolute inset-0 z-30 lg:hidden">
+        {heroStickers
+          .filter((sticker) => sticker.narrow)
+          .map((sticker) => (
+            <DoodleGraphic
+              key={sticker.id}
+              top={sticker.narrow!.top}
+              left={sticker.narrow!.left}
+              right={sticker.narrow!.right}
+              rotate={sticker.rotate}
+              delay={sticker.delay}
+              width={sticker.narrow!.width_css}
+              className="pointer-events-auto"
+            >
+              <img
+                src={sticker.src}
+                alt=""
+                width={sticker.width}
+                height={sticker.height}
+                loading="lazy"
+                decoding="async"
+                className="h-auto w-full"
+              />
+            </DoodleGraphic>
+          ))}
+      </div>
+
       {/* Centre column */}
       <div className="relative z-40 flex w-full max-w-3xl flex-col items-center text-center">
         <h1
