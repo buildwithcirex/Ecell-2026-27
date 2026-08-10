@@ -86,6 +86,11 @@
   /* The back sheet showing through behind the torn edge. */
   --color-tear-shadow: #d5cdbc;
 
+  /* Paper section. Graphite is a warm near-black rather than a pure grey, so
+     the pencil work sits on the warm paper instead of floating over it. */
+  --color-graphite: #33373c;
+  --color-paper-rule: #e3dccd;
+
   --font-display: "Bricolage Grotesque Variable", "Trebuchet MS", sans-serif;
   --font-body: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
 
@@ -266,6 +271,201 @@
     50% {
       transform: translateY(4px);
     }
+  }
+
+  /* Paper section ----------------------------------------------------------- */
+
+  /*
+   * Everything below is gated on `.is-visible`, which an IntersectionObserver
+   * adds once the section reaches the viewport. Gating on a class rather than
+   * running on mount means the reveal happens when the reader actually arrives,
+   * and it only ever plays once.
+   */
+
+  /* Scattered graphite marks. They pop in rather than fade: a fade on a pencil
+     drawing looks like a rendering bug, a pop looks like it was just drawn. */
+  .paper-pop {
+    --pop-rot: 0deg;
+    --pop-delay: 0ms;
+    opacity: 0;
+    transform: rotate(var(--pop-rot)) scale(0.55);
+  }
+
+  .is-visible .paper-pop {
+    animation: paper-pop 620ms cubic-bezier(0.34, 1.42, 0.64, 1) forwards;
+    animation-delay: var(--pop-delay);
+  }
+
+  @keyframes paper-pop {
+    from {
+      opacity: 0;
+      transform: rotate(var(--pop-rot)) scale(0.55);
+    }
+    to {
+      opacity: 1;
+      transform: rotate(var(--pop-rot)) scale(1);
+    }
+  }
+
+  /* The pin drops, so its curve accelerates. `ease-in` is the gravity; the
+     squash at the end is the landing. */
+  .pin-drop {
+    opacity: 0;
+  }
+
+  .is-visible .pin-drop {
+    animation: pin-drop 460ms cubic-bezier(0.55, 0, 0.85, 0.5) 220ms forwards;
+  }
+
+  @keyframes pin-drop {
+    0% {
+      opacity: 0;
+      transform: translateY(-150px) rotate(-22deg) scale(1.25);
+    }
+    70% {
+      opacity: 1;
+    }
+    88% {
+      transform: translateY(4px) rotate(2deg) scale(0.94);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) rotate(0deg) scale(1);
+    }
+  }
+
+  /* Fires on the frame the pin lands, not before. */
+  .pin-impact {
+    opacity: 0;
+  }
+
+  .is-visible .pin-impact {
+    animation: pin-impact 380ms var(--ease-out) 640ms forwards;
+  }
+
+  @keyframes pin-impact {
+    0% {
+      opacity: 0.85;
+      transform: scale(0.35);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.5);
+    }
+  }
+
+  /* The board takes the hit: a short shudder, damped, timed to the landing. */
+  .pin-title {
+    opacity: 0;
+  }
+
+  .is-visible .pin-title {
+    animation:
+      pin-title-in 300ms var(--ease-out) 300ms forwards,
+      pin-shudder 420ms cubic-bezier(0.36, 0.07, 0.19, 0.97) 640ms;
+  }
+
+  @keyframes pin-title-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pin-shudder {
+    0% {
+      transform: translateY(0) rotate(0deg);
+    }
+    22% {
+      transform: translateY(5px) rotate(-0.9deg);
+    }
+    45% {
+      transform: translateY(-2px) rotate(0.6deg);
+    }
+    70% {
+      transform: translateY(2px) rotate(-0.3deg);
+    }
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+  }
+
+  /* Word-by-word rise for the lead paragraph. The index arrives inline, so the
+     stagger is data-driven rather than a wall of nth-child rules. */
+  .word-rise > span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.7em);
+  }
+
+  .is-visible .word-rise > span {
+    animation: word-rise 520ms var(--ease-out) forwards;
+    animation-delay: calc(var(--i) * 26ms + 240ms);
+  }
+
+  @keyframes word-rise {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /*
+   * Hand-drawn underline that draws itself left to right.
+   *
+   * `stroke-dashoffset` on a single dash the length of the path is the standard
+   * way to do this, and it is the one property here that is not transform or
+   * opacity. It is cheap enough on one short path, and there is no transform
+   * equivalent that keeps the line's ragged ends.
+   */
+  .draw-underline path {
+    stroke-dasharray: var(--len);
+    stroke-dashoffset: var(--len);
+  }
+
+  .is-visible .draw-underline path {
+    animation: draw-underline 620ms var(--ease-out) 900ms forwards;
+  }
+
+  @keyframes draw-underline {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* Generic staggered rise for the stat cells and the lower grid. */
+  .paper-rise {
+    --rise-i: 0;
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  .is-visible .paper-rise {
+    animation: paper-rise 560ms var(--ease-out) forwards;
+    animation-delay: calc(var(--rise-i) * 90ms + 200ms);
+  }
+
+  @keyframes paper-rise {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Stat icon leans when you hover its cell. Small, and only on a device that
+     actually has a pointer. */
+  @media (hover: hover) {
+    .stat-cell:hover .stat-icon {
+      transform: rotate(-6deg) scale(1.1);
+    }
+  }
+
+  .stat-icon {
+    transition: transform var(--transition-duration-quick) var(--ease-mech);
   }
 
   /* Wet paint button -------------------------------------------------------- */
@@ -462,5 +662,30 @@
   .wet-btn:hover .wet-btn__drip,
   .wet-btn:focus-visible .wet-btn__drip {
     height: var(--h);
+  }
+
+  /* The paper section arrives in its final state. Nothing drops, shudders,
+     draws or pops; the counters render their real figures immediately. */
+  .paper-pop,
+  .pin-drop,
+  .pin-title,
+  .word-rise > span,
+  .paper-rise {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .pin-impact {
+    display: none;
+  }
+
+  .draw-underline path {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+
+  .stat-cell:hover .stat-icon {
+    transform: none;
   }
 }
