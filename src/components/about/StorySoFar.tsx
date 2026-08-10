@@ -156,24 +156,27 @@ function useCountUp(target: number, active: boolean) {
  */
 function PaperBackdrop() {
   const marks = [
-    // Far margins run the height of the section. Below `lg` the container eats
-    // most of that room, so all but a handful wait for the wider layout.
-    { C: PencilBulb, cls: 'top-[4%] left-[5%] w-[13vw] max-w-24', rot: -8, delay: 120 },
-    { C: PencilChart, cls: 'top-[6%] right-[4%] w-[15vw] max-w-28', rot: 6, delay: 180 },
-    { C: PencilAtom, cls: 'top-[17%] left-[1%] hidden w-[10vw] max-w-24 lg:block', rot: 12, delay: 240 },
-    { C: PencilRocket, cls: 'top-[15%] right-[1%] hidden w-[8vw] max-w-20 lg:block', rot: -10, delay: 300 },
-    { C: PencilChip, cls: 'top-[35%] left-[3%] hidden w-[11vw] max-w-24 md:block', rot: 10, delay: 340 },
-    { C: PencilNeuralNet, cls: 'top-[33%] right-[3%] hidden w-[13vw] max-w-32 md:block', rot: -7, delay: 380 },
-    { C: PencilPaperPlane, cls: 'top-[47%] left-[1%] hidden w-[9vw] max-w-24 lg:block', rot: -14, delay: 420 },
-    { C: PencilMagnifier, cls: 'top-[45%] right-[1%] hidden w-[8vw] max-w-20 lg:block', rot: 9, delay: 460 },
-    { C: PencilStopwatch, cls: 'top-[58%] left-[5%] hidden w-[7vw] max-w-16 lg:block', rot: -6, delay: 500 },
-    { C: PencilCoin, cls: 'top-[59%] right-[5%] hidden w-[8vw] max-w-20 lg:block', rot: 14, delay: 540 },
-    { C: PencilTrophy, cls: 'top-[70%] left-[1%] hidden w-[8vw] max-w-20 md:block', rot: 7, delay: 580 },
-    { C: PencilFlask, cls: 'top-[71%] right-[1%] hidden w-[9vw] max-w-20 md:block', rot: -9, delay: 620 },
-    { C: PencilStickyNote, cls: 'bottom-[17%] left-[6%] hidden w-[8vw] max-w-20 lg:block', rot: -11, delay: 660 },
-    { C: PencilPlug, cls: 'bottom-[19%] right-[6%] hidden w-[7vw] max-w-16 lg:block', rot: 8, delay: 700 },
-    { C: PencilGear, cls: 'bottom-[4%] left-[4%] w-[11vw] max-w-20', rot: 14, delay: 740 },
-    { C: PencilScribbleArrow, cls: 'bottom-[5%] right-[10%] w-[12vw] max-w-24', rot: -4, delay: 780 },
+    // Spread across the sheet rather than lined up down the margins. `dim`
+    // marks sit under the copy, so they run lighter and read as part of the
+    // paper rather than competing with the words on top of them.
+    { C: PencilBulb, cls: 'top-[4%] left-[6%] w-[13vw] max-w-24', rot: -8, d: 120 },
+    { C: PencilChart, cls: 'top-[6%] right-[5%] w-[15vw] max-w-28', rot: 6, d: 180 },
+    { C: PencilAtom, cls: 'top-[13%] left-[26%] hidden w-[9vw] max-w-20 lg:block', rot: 12, d: 220, dim: true },
+    { C: PencilRocket, cls: 'top-[11%] right-[27%] hidden w-[7vw] max-w-16 lg:block', rot: -10, d: 260, dim: true },
+    { C: PencilPaperPlane, cls: 'top-[25%] left-[45%] hidden w-[8vw] max-w-20 md:block', rot: -16, d: 300, dim: true },
+    { C: PencilChip, cls: 'top-[34%] left-[2%] w-[11vw] max-w-24', rot: 10, d: 340 },
+    { C: PencilNeuralNet, cls: 'top-[32%] right-[2%] hidden w-[13vw] max-w-32 md:block', rot: -7, d: 380 },
+    { C: PencilStopwatch, cls: 'top-[41%] left-[31%] hidden w-[6vw] max-w-14 lg:block', rot: -6, d: 420, dim: true },
+    { C: PencilCoin, cls: 'top-[43%] right-[30%] hidden w-[7vw] max-w-16 lg:block', rot: 14, d: 460, dim: true },
+    { C: PencilMagnifier, cls: 'top-[52%] left-[13%] hidden w-[8vw] max-w-20 md:block', rot: 9, d: 500 },
+    { C: PencilTrophy, cls: 'top-[54%] right-[12%] hidden w-[8vw] max-w-20 md:block', rot: 7, d: 540 },
+    { C: PencilFlask, cls: 'top-[63%] left-[41%] hidden w-[8vw] max-w-20 lg:block', rot: -9, d: 580, dim: true },
+    { C: PencilStickyNote, cls: 'top-[74%] left-[3%] w-[9vw] max-w-20', rot: -11, d: 620 },
+    { C: PencilPlug, cls: 'top-[76%] right-[3%] hidden w-[7vw] max-w-16 md:block', rot: 8, d: 660 },
+    { C: PencilAtom, cls: 'bottom-[13%] left-[36%] hidden w-[7vw] max-w-16 lg:block', rot: -14, d: 700, dim: true },
+    { C: PencilGear, cls: 'bottom-[4%] left-[7%] w-[11vw] max-w-20', rot: 14, d: 740 },
+    { C: PencilScribbleArrow, cls: 'bottom-[5%] right-[9%] w-[12vw] max-w-24', rot: -4, d: 780 },
+    { C: PencilChart, cls: 'bottom-[8%] left-[47%] hidden w-[8vw] max-w-20 lg:block', rot: 9, d: 820, dim: true },
   ]
 
   return (
@@ -181,12 +184,12 @@ function PaperBackdrop() {
       aria-hidden="true"
       className="pointer-events-none absolute inset-0 text-graphite/35"
     >
-      {marks.map(({ C, cls, rot, delay }, i) => (
+      {marks.map(({ C, cls, rot, d, dim }, i) => (
         <div
           key={i}
-          className={cn('paper-pop absolute', cls)}
+          className={cn('paper-pop absolute', dim && 'opacity-45', cls)}
           style={
-            { '--pop-rot': `${rot}deg`, '--pop-delay': `${delay}ms` } as CSSProperties
+            { '--pop-rot': `${rot}deg`, '--pop-delay': `${d}ms` } as CSSProperties
           }
         >
           <C className="w-full" />
@@ -379,7 +382,7 @@ export function StorySoFar() {
       ref={ref}
       aria-labelledby="about-heading"
       className={cn(
-        'relative isolate overflow-hidden bg-paper px-5 pt-20 pb-24 sm:px-8 sm:pt-36 sm:pb-28 lg:pt-44 lg:pb-36',
+        'paper-depth relative isolate -mt-px overflow-hidden bg-paper px-5 pt-20 pb-24 sm:px-8 sm:pt-36 sm:pb-28 lg:pt-44 lg:pb-36',
         inView && 'is-visible',
       )}
     >
@@ -444,7 +447,7 @@ export function StorySoFar() {
               aria-hidden="true"
               className="absolute -right-3 -bottom-3 z-10 h-7 w-16 -rotate-12 rounded-[2px] bg-graphite/12"
             />
-            <div className="flex aspect-[4/3] w-full items-center justify-center rounded-[3px] border-2 border-dashed border-graphite/25 bg-graphite/[0.04]">
+            <div className="photo-slot flex aspect-[4/3] w-full items-center justify-center rounded-[3px] border-2 border-dashed border-graphite/25 bg-graphite/[0.04]">
               <p className="px-6 text-center font-body text-xs tracking-[0.18em] text-graphite/70 uppercase">
                 Core group photo
               </p>
