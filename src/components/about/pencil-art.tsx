@@ -162,58 +162,6 @@ export function PencilScribbleArrow({ className }: ArtProps) {
 }
 
 /* ------------------------------------------------------------------ */
-/* Stat icons                                                          */
-/* ------------------------------------------------------------------ */
-
-export function IconMembers({ className }: ArtProps) {
-  return (
-    <svg viewBox="0 0 64 48" className={className} style={pencil} {...stroke}>
-      <circle cx="32" cy="14" r="9" />
-      <path d="M18 44c0-8 6.3-13 14-13s14 5 14 13" />
-      <circle cx="12" cy="19" r="6.5" opacity="0.75" />
-      <path d="M2 44c0-6 4-10 10-10" opacity="0.75" />
-      <circle cx="52" cy="19" r="6.5" opacity="0.75" />
-      <path d="M62 44c0-6-4-10-10-10" opacity="0.75" />
-    </svg>
-  )
-}
-
-export function IconEvents({ className }: ArtProps) {
-  return (
-    <svg viewBox="0 0 56 52" className={className} style={pencil} {...stroke}>
-      <rect x="4" y="9" width="48" height="39" rx="4" />
-      <path d="M4 21h48" />
-      <path d="M16 13V3M40 13V3" />
-      <path d="m17 33 5 5 10-11" />
-      <path d="M38 30h6M38 39h6" opacity="0.7" />
-    </svg>
-  )
-}
-
-export function IconPartners({ className }: ArtProps) {
-  return (
-    <svg viewBox="0 0 68 44" className={className} style={pencil} {...stroke}>
-      <path d="M2 16 14 8l10 6 8-4 8 4 10-6 12 8" />
-      <path d="M24 14 16 24c-2 3 2 7 5 4l6-5" />
-      <path d="m32 18 12 11c3 2 7-2 4-5l-8-8" />
-      <path d="M27 23c3 3 6 6 9 8 3 2 6-1 4-4" opacity="0.8" />
-      <path d="M4 34h10M54 34h10" opacity="0.6" />
-    </svg>
-  )
-}
-
-export function IconInitiatives({ className }: ArtProps) {
-  return (
-    <svg viewBox="0 0 52 60" className={className} style={pencil} {...stroke}>
-      <path d="M26 56V26" />
-      <path d="M26 30C26 18 17 9 5 8c0 12 9 21 21 22Z" />
-      <path d="M26 24c0-11 8-19 19-20 0 11-8 19-19 20Z" opacity="0.85" />
-      <path d="M14 56h24" />
-    </svg>
-  )
-}
-
-/* ------------------------------------------------------------------ */
 /* The pin                                                             */
 /* ------------------------------------------------------------------ */
 
@@ -261,6 +209,89 @@ export function PinImpact({ className }: ArtProps) {
   return (
     <svg viewBox="0 0 60 60" className={className} {...stroke} strokeWidth={2.5}>
       <path d="M30 16V4M44 22l8-8M16 22l-8-8M48 34h9M12 34H4M40 44l6 7" />
+    </svg>
+  )
+}
+
+export function PencilRocket({ className }: ArtProps) {
+  return (
+    <svg viewBox="0 0 60 84" className={className} style={pencil} {...stroke}>
+      <path d="M30 3c9 9 14 20 14 32v22H16V35C16 23 21 12 30 3Z" />
+      <path d="M16 40 5 51v18l11-8ZM44 40l11 11v18l-11-8Z" />
+      <circle cx="30" cy="31" r="7" />
+      <path d="M23 63c2 6 4 11 7 17 3-6 5-11 7-17" opacity="0.8" />
+    </svg>
+  )
+}
+
+export function PencilAtom({ className }: ArtProps) {
+  return (
+    <svg viewBox="0 0 84 84" className={className} style={pencil} {...stroke}>
+      <circle cx="42" cy="42" r="6" />
+      <ellipse cx="42" cy="42" rx="38" ry="15" />
+      <ellipse cx="42" cy="42" rx="38" ry="15" transform="rotate(60 42 42)" />
+      <ellipse cx="42" cy="42" rx="38" ry="15" transform="rotate(120 42 42)" />
+    </svg>
+  )
+}
+
+export function PencilTrophy({ className }: ArtProps) {
+  return (
+    <svg viewBox="0 0 64 76" className={className} style={pencil} {...stroke}>
+      <path d="M16 6h32v22c0 9-7 16-16 16s-16-7-16-16Z" />
+      <path d="M16 12H6v6c0 7 5 11 10 11M48 12h10v6c0 7-5 11-10 11" />
+      <path d="M32 44v14M20 70h24l-3-12H23Z" />
+    </svg>
+  )
+}
+
+export function PencilMagnifier({ className }: ArtProps) {
+  return (
+    <svg viewBox="0 0 72 72" className={className} style={pencil} {...stroke}>
+      <circle cx="29" cy="29" r="22" />
+      <path d="m45 45 22 22" strokeWidth={4} />
+      <path d="M21 22a11 11 0 0 1 9-4" opacity="0.7" />
+    </svg>
+  )
+}
+
+export function PencilStopwatch({ className }: ArtProps) {
+  return (
+    <svg viewBox="0 0 64 76" className={className} style={pencil} {...stroke}>
+      <circle cx="32" cy="44" r="26" />
+      <path d="M32 44V28M32 44l12 8" />
+      <path d="M24 6h16M32 6v12" />
+      <path d="m52 20 6-6" opacity="0.8" />
+    </svg>
+  )
+}
+
+export function PencilPlug({ className }: ArtProps) {
+  return (
+    <svg viewBox="0 0 60 76" className={className} style={pencil} {...stroke}>
+      <path d="M18 4v20M42 4v20" />
+      <path d="M10 24h40v10c0 11-9 20-20 20s-20-9-20-20Z" />
+      <path d="M30 54v18" />
+    </svg>
+  )
+}
+
+export function PencilCoin({ className }: ArtProps) {
+  return (
+    <svg viewBox="0 0 72 72" className={className} style={pencil} {...stroke}>
+      <circle cx="36" cy="36" r="28" />
+      <circle cx="36" cy="36" r="21" opacity="0.6" />
+      <path d="M28 26h16M28 34h16M40 26c0 8-6 8-12 8l14 14" />
+    </svg>
+  )
+}
+
+export function PencilStickyNote({ className }: ArtProps) {
+  return (
+    <svg viewBox="0 0 68 68" className={className} style={pencil} {...stroke}>
+      <path d="M6 6h56v40L44 62H6Z" />
+      <path d="M62 46H44v16" />
+      <path d="M16 20h34M16 30h34M16 40h20" opacity="0.7" />
     </svg>
   )
 }

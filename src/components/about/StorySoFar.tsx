@@ -3,20 +3,28 @@ import type { CSSProperties } from 'react'
 
 import { WetPaintButton } from '@/components/ui/wet-paint-button'
 import { cn } from '@/lib/utils'
+import stat10 from '@/assets/hero/stat-10.webp'
+import stat100 from '@/assets/hero/stat-100.webp'
+import stat20 from '@/assets/hero/stat-20.webp'
+import stat500 from '@/assets/hero/stat-500.webp'
 import {
-  IconEvents,
-  IconInitiatives,
-  IconMembers,
-  IconPartners,
+  PencilAtom,
   PencilBulb,
   PencilChart,
   PencilChip,
   PencilDefs,
   PencilFlask,
   PencilGear,
+  PencilCoin,
+  PencilMagnifier,
   PencilNeuralNet,
   PencilPaperPlane,
+  PencilPlug,
+  PencilRocket,
   PencilScribbleArrow,
+  PencilStickyNote,
+  PencilStopwatch,
+  PencilTrophy,
   PinImpact,
   PushPin,
 } from './pencil-art'
@@ -26,10 +34,10 @@ import {
 /* ------------------------------------------------------------------ */
 
 const STATS = [
-  { value: 500, label: 'Active Members', Icon: IconMembers },
-  { value: 100, label: 'Events and Workshops', Icon: IconEvents },
-  { value: 20, label: 'Industry Partners', Icon: IconPartners },
-  { value: 10, label: 'Student-led Initiatives', Icon: IconInitiatives },
+  { value: 500, label: 'Active Members', art: stat500, w: 340, h: 291 },
+  { value: 100, label: 'Events and Workshops', art: stat100, w: 340, h: 95 },
+  { value: 20, label: 'Industry Partners', art: stat20, w: 340, h: 332 },
+  { value: 10, label: 'Student-led Initiatives', art: stat10, w: 340, h: 73 },
 ] as const
 
 /**
@@ -148,40 +156,30 @@ function useCountUp(target: number, active: boolean) {
  */
 function PaperBackdrop() {
   const marks = [
-    { C: PencilBulb, cls: 'top-[6%] left-[6%] w-[13vw] max-w-24', rot: -8, delay: 120 },
-    { C: PencilChart, cls: 'top-[9%] right-[5%] w-[15vw] max-w-28', rot: 6, delay: 200 },
-    {
-      C: PencilChip,
-      cls: 'top-[38%] left-[3%] hidden w-[11vw] max-w-24 md:block',
-      rot: 10,
-      delay: 280,
-    },
-    {
-      C: PencilNeuralNet,
-      cls: 'top-[34%] right-[3%] hidden w-[13vw] max-w-32 md:block',
-      rot: -7,
-      delay: 340,
-    },
-    { C: PencilGear, cls: 'bottom-[6%] left-[4%] w-[11vw] max-w-20', rot: 14, delay: 400 },
-    {
-      C: PencilPaperPlane,
-      cls: 'top-[54%] left-[2%] hidden w-[9vw] max-w-24 lg:block',
-      rot: -12,
-      delay: 460,
-    },
-    {
-      C: PencilFlask,
-      cls: 'bottom-[22%] right-[4%] hidden w-[9vw] max-w-20 md:block',
-      rot: 8,
-      delay: 520,
-    },
-    { C: PencilScribbleArrow, cls: 'bottom-[6%] right-[12%] w-[12vw] max-w-24', rot: -4, delay: 580 },
+    // Far margins run the height of the section. Below `lg` the container eats
+    // most of that room, so all but a handful wait for the wider layout.
+    { C: PencilBulb, cls: 'top-[4%] left-[5%] w-[13vw] max-w-24', rot: -8, delay: 120 },
+    { C: PencilChart, cls: 'top-[6%] right-[4%] w-[15vw] max-w-28', rot: 6, delay: 180 },
+    { C: PencilAtom, cls: 'top-[17%] left-[1%] hidden w-[10vw] max-w-24 lg:block', rot: 12, delay: 240 },
+    { C: PencilRocket, cls: 'top-[15%] right-[1%] hidden w-[8vw] max-w-20 lg:block', rot: -10, delay: 300 },
+    { C: PencilChip, cls: 'top-[35%] left-[3%] hidden w-[11vw] max-w-24 md:block', rot: 10, delay: 340 },
+    { C: PencilNeuralNet, cls: 'top-[33%] right-[3%] hidden w-[13vw] max-w-32 md:block', rot: -7, delay: 380 },
+    { C: PencilPaperPlane, cls: 'top-[47%] left-[1%] hidden w-[9vw] max-w-24 lg:block', rot: -14, delay: 420 },
+    { C: PencilMagnifier, cls: 'top-[45%] right-[1%] hidden w-[8vw] max-w-20 lg:block', rot: 9, delay: 460 },
+    { C: PencilStopwatch, cls: 'top-[58%] left-[5%] hidden w-[7vw] max-w-16 lg:block', rot: -6, delay: 500 },
+    { C: PencilCoin, cls: 'top-[59%] right-[5%] hidden w-[8vw] max-w-20 lg:block', rot: 14, delay: 540 },
+    { C: PencilTrophy, cls: 'top-[70%] left-[1%] hidden w-[8vw] max-w-20 md:block', rot: 7, delay: 580 },
+    { C: PencilFlask, cls: 'top-[71%] right-[1%] hidden w-[9vw] max-w-20 md:block', rot: -9, delay: 620 },
+    { C: PencilStickyNote, cls: 'bottom-[17%] left-[6%] hidden w-[8vw] max-w-20 lg:block', rot: -11, delay: 660 },
+    { C: PencilPlug, cls: 'bottom-[19%] right-[6%] hidden w-[7vw] max-w-16 lg:block', rot: 8, delay: 700 },
+    { C: PencilGear, cls: 'bottom-[4%] left-[4%] w-[11vw] max-w-20', rot: 14, delay: 740 },
+    { C: PencilScribbleArrow, cls: 'bottom-[5%] right-[10%] w-[12vw] max-w-24', rot: -4, delay: 780 },
   ]
 
   return (
     <div
       aria-hidden="true"
-      className="pointer-events-none absolute inset-0 text-graphite/25"
+      className="pointer-events-none absolute inset-0 text-graphite/35"
     >
       {marks.map(({ C, cls, rot, delay }, i) => (
         <div
@@ -227,13 +225,17 @@ function PinnedTitle() {
 function Stat({
   value,
   label,
-  Icon,
+  art,
+  artWidth,
+  artHeight,
   index,
   active,
 }: {
   value: number
   label: string
-  Icon: (props: { className?: string }) => React.JSX.Element
+  art: string
+  artWidth: number
+  artHeight: number
   index: number
   active: boolean
 }) {
@@ -253,7 +255,17 @@ function Stat({
       )}
       style={{ '--rise-i': index } as CSSProperties}
     >
-      <Icon className="stat-icon mb-3 h-9 w-auto text-graphite/70 sm:h-11" />
+      <div className="mb-3 flex h-14 w-full max-w-[8.5rem] items-center justify-center sm:h-16">
+        <img
+          src={art}
+          alt=""
+          width={artWidth}
+          height={artHeight}
+          loading="lazy"
+          decoding="async"
+          className="stat-icon max-h-full w-auto max-w-full object-contain"
+        />
+      </div>
 
       <p className="font-display text-[clamp(2.25rem,6vw,3.75rem)] leading-none font-extrabold tracking-tight text-ink tabular-nums">
         {shown}
@@ -386,7 +398,9 @@ export function StorySoFar() {
               key={stat.label}
               value={stat.value}
               label={stat.label}
-              Icon={stat.Icon}
+              art={stat.art}
+              artWidth={stat.w}
+              artHeight={stat.h}
               index={i}
               active={inView}
             />
