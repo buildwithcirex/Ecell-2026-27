@@ -1,6 +1,7 @@
 import { Briefcase, Home, Rocket, Users } from 'lucide-react'
 
 import { SmoothScroll } from '@/components/SmoothScroll'
+import { StorySoFar } from '@/components/about/StorySoFar'
 import { Hero } from '@/components/hero/Hero'
 import { Logo } from '@/components/ui/logo'
 import { NavBar, type NavItem } from '@/components/ui/tube-light-navbar'
@@ -35,6 +36,7 @@ function App() {
 
       <main id="top">
         <Hero />
+        <StorySoFar />
       </main>
     </>
   )

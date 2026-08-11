@@ -148,6 +148,12 @@ CUTOUTS = [
     ("graphic-5.png", "graphic-email-finds-you", 360),
     ("graphic-6.png", "graphic-boo", 360),
     ("landing-end.png", "landing-end", 800),
+    # Stat stickers. Named for the figure they sit under, and sourced from
+    # `hero/` because that is where they were committed.
+    ("hero/500+graphic.png", "stat-500", 340),
+    ("hero/100+graphic.png", "stat-100", 340),
+    ("hero/20+graphic.png", "stat-20", 340),
+    ("hero/10+graphic.png", "stat-10", 340),
 ]
 
 # Already has real transparency, so it only needs resizing. Lossless keeps the
@@ -172,12 +178,13 @@ PHOTOS = [
 
 def main() -> int:
     rows: list[tuple[str, str, int, int, int, int]] = []
+    skipped: list[str] = []
 
     for source, name, long_edge in CUTOUTS:
         path = SRC / source
         if not path.exists():
-            print(f"  missing: {path}", file=sys.stderr)
-            return 1
+            skipped.append(source)
+            continue
         before = path.stat().st_size
         im = remove_background(Image.open(path))
         im = fit(trim(im), long_edge)
@@ -185,15 +192,18 @@ def main() -> int:
         rows.append(("cutout", out_name, w, h, before, size))
 
     path = SRC / LOGO[0]
-    im = fit(trim(Image.open(path).convert("RGBA")), LOGO[2])
-    out_name, w, h, size = save(im, LOGO[1], lossless=True)
-    rows.append(("logo", out_name, w, h, path.stat().st_size, size))
+    if path.exists():
+        im = fit(trim(Image.open(path).convert("RGBA")), LOGO[2])
+        out_name, w, h, size = save(im, LOGO[1], lossless=True)
+        rows.append(("logo", out_name, w, h, path.stat().st_size, size))
+    else:
+        skipped.append(LOGO[0])
 
     for source, name, long_edge in PHOTOS:
         path = SRC / source
         if not path.exists():
-            print(f"  missing: {path}", file=sys.stderr)
-            return 1
+            skipped.append(source)
+            continue
         before = path.stat().st_size
         im = fit(Image.open(path).convert("RGB"), long_edge)
         out_name, w, h, size = save(im, name)
@@ -205,6 +215,17 @@ def main() -> int:
             f"{kind:8s} {name:28s} {f'{w}x{h}':>12s} "
             f"{before / 1024:8.0f}K {after / 1024:8.0f}K"
         )
+    if skipped:
+        print(
+            f"\nskipped {len(skipped)} source(s) no longer in the repo; their "
+            f"existing derivatives in src/assets/hero/ are unchanged:"
+        )
+        for name in skipped:
+            print(f"  {name}")
+
+    if not rows:
+        return 0
+
     total_before = sum(r[4] for r in rows)
     total_after = sum(r[5] for r in rows)
     print(
