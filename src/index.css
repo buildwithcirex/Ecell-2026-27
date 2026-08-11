@@ -1,0 +1,754 @@
+@import "tailwindcss";
+
+/* ---------------------------------------------------------------------------
+   Typefaces
+
+   Self-hosted, latin and latin-ext only. Fontsource's own index.css also ships
+   cyrillic and vietnamese subsets, which would be emitted into the bundle and
+   never downloaded. Declaring the two subsets we need keeps the font payload at
+   roughly 106KB across both families.
+   --------------------------------------------------------------------------- */
+
+@font-face {
+  font-family: "Bricolage Grotesque Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Bricolage Grotesque Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 200 800;
+  src: url("@fontsource-variable/bricolage-grotesque/files/bricolage-grotesque-latin-ext-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+@font-face {
+  font-family: "Geist Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("@fontsource-variable/geist/files/geist-latin-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0000-00FF, U+0131, U+0152-0153, U+02BB-02BC, U+02C6, U+02DA,
+    U+02DC, U+0304, U+0308, U+0329, U+2000-206F, U+20AC, U+2122, U+2191, U+2193,
+    U+2212, U+2215, U+FEFF, U+FFFD;
+}
+
+@font-face {
+  font-family: "Geist Variable";
+  font-style: normal;
+  font-display: swap;
+  font-weight: 100 900;
+  src: url("@fontsource-variable/geist/files/geist-latin-ext-wght-normal.woff2")
+    format("woff2-variations");
+  unicode-range: U+0100-02BA, U+02BD-02C5, U+02C7-02CC, U+02CE-02D7, U+02DD-02FF,
+    U+0304, U+0308, U+0329, U+1D00-1DBF, U+1E00-1E9F, U+1EF2-1EFF, U+2020,
+    U+20A0-20AB, U+20AD-20C0, U+2113, U+2C60-2C7F, U+A720-A7FF;
+}
+
+/* ---------------------------------------------------------------------------
+   Tokens
+
+   Every colour, duration and easing in the hero resolves to one of these. No
+   component hardcodes a hex or a millisecond value.
+   --------------------------------------------------------------------------- */
+
+@theme {
+  /* Hero ground, sampled from the Canva mock: near-black navy in the corners
+     resolving to a brighter blue low-centre. */
+  --color-hero-deep: #060c1c;
+  --color-hero-mid: #0c1c3f;
+  --color-hero-blue: #16408a;
+  --color-hero-bright: #2468cc;
+
+  /* Foreground */
+  --color-cream: #f5eee1;
+  --color-paper: #faf7f0;
+  --color-ink: #0b1120;
+  /* Light enough to clear 4.5:1 against the brightest part of the wash, which
+     is where the description sits. The obvious mid-blue-grey does not. */
+  --color-steel: #c8d6ee;
+  /* Brighter, lighter orange, per the brief. Note this is a deliberate
+     trade: white on this orange measures 2.6:1, under the 4.5:1 AA needs for
+     body-size text. See the note beside the CTA. */
+  --color-signal: #ff7a33;
+  /* The back sheet showing through behind the torn edge. */
+  --color-tear-shadow: #d5cdbc;
+
+  /* Paper section. Graphite is a warm near-black rather than a pure grey, so
+     the pencil work sits on the warm paper instead of floating over it. */
+  --color-graphite: #33373c;
+  --color-paper-rule: #e3dccd;
+
+  --font-display: "Bricolage Grotesque Variable", "Trebuchet MS", sans-serif;
+  --font-body: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+
+  /* Smaller than Tailwind's `text-xs`. Used only for the tracked uppercase
+     label inside a placeholder frame. */
+  --text-micro: 0.5rem;
+
+  /* The frames are paper sitting on a dark ground. The shadow is the cue that
+     says so, and it is the only shadow in the section. */
+  --shadow-frame: 0 10px 30px rgb(3 8 20 / 0.45);
+
+  --ease-mech: cubic-bezier(0.2, 0, 0, 1);
+  --ease-out: cubic-bezier(0.16, 1, 0.3, 1);
+
+  /* Namespaced `--transition-duration-*`, not `--duration-*`: that is the key
+     Tailwind v4 resolves for its `duration-*` utilities. Naming them this way
+     means one declaration serves both the utility and `var()` in the rules
+     below, instead of the two drifting apart. */
+  --transition-duration-instant: 120ms;
+  --transition-duration-quick: 180ms;
+  --transition-duration-base: 620ms;
+}
+
+/* ---------------------------------------------------------------------------
+   Base
+   --------------------------------------------------------------------------- */
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+  }
+
+  body {
+    margin: 0;
+    background-color: var(--color-hero-deep);
+    color: var(--color-cream);
+    font-family: var(--font-body);
+    font-synthesis-weight: none;
+    text-rendering: optimizeLegibility;
+    -webkit-font-smoothing: antialiased;
+    /* `clip` rather than `hidden`: it suppresses stray horizontal overflow from
+       the rotated frames without turning body into a scroll container. */
+    overflow-x: clip;
+  }
+
+  :focus-visible {
+    outline: 2px solid var(--color-signal);
+    outline-offset: 2px;
+    border-radius: 2px;
+  }
+
+  ::selection {
+    background-color: var(--color-signal);
+    color: var(--color-paper);
+  }
+
+  img,
+  svg {
+    display: block;
+  }
+
+  /* `max-width: 100%` deliberately does NOT extend to `svg`. An icon with fixed
+     width and height inside a shrink-to-fit parent resolves its percentage
+     against a width that its own content defines, the two collapse into each
+     other, and the icon renders as a 1px sliver. Every SVG here is sized by an
+     explicit width utility, so none of them need the clamp. */
+  img {
+    max-width: 100%;
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Hero motion
+
+   Transform and opacity only, so every animation stays on the compositor.
+   Per-element rotation and delay arrive as custom properties set inline, which
+   keeps the scatter data-driven instead of hardcoded in a stylesheet.
+
+   Every entrance below fills `backwards`, never `both`. A filled-forwards
+   animation keeps applying its final keyframe, and animations outrank normal
+   declarations in the cascade, so `both` would leave the `to { transform }`
+   pinned on the element and no `:hover` transform could ever win. `backwards`
+   covers the delay and then releases, handing the element back to its own
+   rules once the entrance is done.
+   --------------------------------------------------------------------------- */
+
+@layer components {
+  /* Scattered photo frames -------------------------------------------------- */
+
+  .hero-frame {
+    --frame-rot: 0deg;
+    --frame-delay: 0ms;
+    transform: rotate(var(--frame-rot));
+    /* Slightly slower than the old 180ms and with an overshoot curve: at this
+       travel distance a linear-feeling snap looks like a glitch, a small
+       overshoot looks like something being picked up. */
+    transition:
+      transform 300ms cubic-bezier(0.34, 1.32, 0.64, 1),
+      box-shadow 300ms var(--ease-mech);
+    animation: frame-in var(--transition-duration-base) var(--ease-out) backwards;
+    animation-delay: var(--frame-delay);
+  }
+
+  /*
+   * The frame does not just nudge, it comes out of the stack: it straightens,
+   * jumps well forward in scale, and lifts. The shadow grows with it, which is
+   * what actually sells the distance rather than the scale on its own.
+   *
+   * `z-index` is raised so it clears the frames it was tucked behind. The
+   * quirky cut edge is untouched, so it still reads as the same scrap of paper,
+   * just held up to the light.
+   */
+  .hero-frame:hover,
+  .hero-frame:focus-within {
+    transform: rotate(0deg) translateY(-18px) scale(1.32);
+    box-shadow: 0 28px 55px rgb(3 8 20 / 0.6);
+    z-index: 30;
+  }
+
+  @keyframes frame-in {
+    from {
+      opacity: 0;
+      transform: rotate(var(--frame-rot)) translateY(18px) scale(0.96);
+    }
+    to {
+      opacity: 1;
+      transform: rotate(var(--frame-rot));
+    }
+  }
+
+  /* Loose doodle graphics --------------------------------------------------- */
+
+  .hero-graphic {
+    --graphic-rot: 0deg;
+    --graphic-delay: 0ms;
+    transform: rotate(var(--graphic-rot));
+    transition: transform var(--transition-duration-instant) var(--ease-mech);
+    animation: graphic-in var(--transition-duration-base) var(--ease-out) backwards;
+    animation-delay: var(--graphic-delay);
+  }
+
+  .hero-graphic:hover {
+    transform: rotate(calc(var(--graphic-rot) + 6deg)) translateY(-6px)
+      scale(1.12);
+  }
+
+  @keyframes graphic-in {
+    from {
+      opacity: 0;
+      transform: rotate(var(--graphic-rot)) scale(0.7);
+    }
+    to {
+      opacity: 1;
+      transform: rotate(var(--graphic-rot));
+    }
+  }
+
+  /* Idle drift. Lives on an inner wrapper rather than on .hero-graphic itself,
+     so it owns translateY while the parent owns rotate and scale. Stacking them
+     on one element would put two animations on the same transform property and
+     the hover bounce would never render.
+
+     Applied to exactly two graphics: more than a couple of things moving at
+     once in a still viewport reads as generated. */
+  .hero-drift {
+    animation: drift 6s ease-in-out 900ms infinite;
+  }
+
+  .hero-graphic:hover .hero-drift {
+    animation-play-state: paused;
+  }
+
+  @keyframes drift {
+    0%,
+    100% {
+      transform: translateY(-4px);
+    }
+    50% {
+      transform: translateY(4px);
+    }
+  }
+
+  /* Paper section ----------------------------------------------------------- */
+
+  /*
+   * Depth on the sheet. Three cheap layers, no images:
+   *  - a fibre texture from a tiled SVG turbulence, at 3.5% so it reads as
+   *    tooth rather than noise;
+   *  - a soft vignette, so the sheet has a centre and is not a flat fill;
+   *  - a warm inner edge, which is what a real sheet does under light.
+   * All of it is behind the content and takes no pointer events.
+   */
+  .paper-depth::before,
+  .paper-depth::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+  }
+
+  .paper-depth::before {
+    opacity: 0.035;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.85' numOctaves='3'/%3E%3C/filter%3E%3Crect width='160' height='160' filter='url(%23n)'/%3E%3C/svg%3E");
+    background-size: 160px 160px;
+  }
+
+  .paper-depth::after {
+    background:
+      radial-gradient(
+        ellipse 80% 55% at 50% 45%,
+        transparent 0%,
+        rgb(120 104 74 / 0.06) 100%
+      ),
+      inset 0 0 0 0 transparent;
+    box-shadow: inset 0 0 90px rgb(120 104 74 / 0.07);
+  }
+
+  /* Stickers sit on the paper, so they cast onto it. */
+  .stat-icon {
+    filter: drop-shadow(0 4px 6px rgb(60 50 30 / 0.18));
+  }
+
+  /* The photo slot lifts off the sheet on hover, like a print you pick at. */
+  .photo-slot {
+    transition:
+      transform var(--transition-duration-quick) var(--ease-mech),
+      box-shadow var(--transition-duration-quick) var(--ease-mech);
+    box-shadow: 0 2px 6px rgb(60 50 30 / 0.08);
+  }
+
+  @media (hover: hover) {
+    .photo-slot:hover {
+      transform: translateY(-4px) rotate(-0.6deg);
+      box-shadow: 0 14px 28px rgb(60 50 30 / 0.16);
+    }
+  }
+
+  /*
+   * Everything below is gated on `.is-visible`, which an IntersectionObserver
+   * adds once the section reaches the viewport. Gating on a class rather than
+   * running on mount means the reveal happens when the reader actually arrives,
+   * and it only ever plays once.
+   */
+
+  /* Scattered graphite marks. They pop in rather than fade: a fade on a pencil
+     drawing looks like a rendering bug, a pop looks like it was just drawn. */
+  .paper-pop {
+    --pop-rot: 0deg;
+    --pop-delay: 0ms;
+    opacity: 0;
+    transform: rotate(var(--pop-rot)) scale(0.55);
+  }
+
+  .is-visible .paper-pop {
+    animation: paper-pop 620ms cubic-bezier(0.34, 1.42, 0.64, 1) forwards;
+    animation-delay: var(--pop-delay);
+  }
+
+  @keyframes paper-pop {
+    from {
+      opacity: 0;
+      transform: rotate(var(--pop-rot)) scale(0.55);
+    }
+    to {
+      opacity: 1;
+      transform: rotate(var(--pop-rot)) scale(1);
+    }
+  }
+
+  /* The pin drops, so its curve accelerates. `ease-in` is the gravity; the
+     squash at the end is the landing. */
+  .pin-drop {
+    opacity: 0;
+  }
+
+  .is-visible .pin-drop {
+    animation: pin-drop 460ms cubic-bezier(0.55, 0, 0.85, 0.5) 220ms forwards;
+  }
+
+  @keyframes pin-drop {
+    0% {
+      opacity: 0;
+      transform: translateY(-150px) rotate(-22deg) scale(1.25);
+    }
+    70% {
+      opacity: 1;
+    }
+    88% {
+      transform: translateY(4px) rotate(2deg) scale(0.94);
+    }
+    100% {
+      opacity: 1;
+      transform: translateY(0) rotate(0deg) scale(1);
+    }
+  }
+
+  /* Fires on the frame the pin lands, not before. */
+  .pin-impact {
+    opacity: 0;
+  }
+
+  .is-visible .pin-impact {
+    animation: pin-impact 380ms var(--ease-out) 640ms forwards;
+  }
+
+  @keyframes pin-impact {
+    0% {
+      opacity: 0.85;
+      transform: scale(0.35);
+    }
+    100% {
+      opacity: 0;
+      transform: scale(1.5);
+    }
+  }
+
+  /* The board takes the hit: a short shudder, damped, timed to the landing. */
+  .pin-title {
+    opacity: 0;
+  }
+
+  .is-visible .pin-title {
+    animation:
+      pin-title-in 300ms var(--ease-out) 300ms forwards,
+      pin-shudder 420ms cubic-bezier(0.36, 0.07, 0.19, 0.97) 640ms;
+  }
+
+  @keyframes pin-title-in {
+    from {
+      opacity: 0;
+      transform: translateY(-10px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  @keyframes pin-shudder {
+    0% {
+      transform: translateY(0) rotate(0deg);
+    }
+    22% {
+      transform: translateY(5px) rotate(-0.9deg);
+    }
+    45% {
+      transform: translateY(-2px) rotate(0.6deg);
+    }
+    70% {
+      transform: translateY(2px) rotate(-0.3deg);
+    }
+    100% {
+      transform: translateY(0) rotate(0deg);
+    }
+  }
+
+  /* Word-by-word rise for the lead paragraph. The index arrives inline, so the
+     stagger is data-driven rather than a wall of nth-child rules. */
+  .word-rise > span {
+    display: inline-block;
+    opacity: 0;
+    transform: translateY(0.7em);
+  }
+
+  .is-visible .word-rise > span {
+    animation: word-rise 520ms var(--ease-out) forwards;
+    animation-delay: calc(var(--i) * 26ms + 240ms);
+  }
+
+  @keyframes word-rise {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /*
+   * Hand-drawn underline that draws itself left to right.
+   *
+   * `stroke-dashoffset` on a single dash the length of the path is the standard
+   * way to do this, and it is the one property here that is not transform or
+   * opacity. It is cheap enough on one short path, and there is no transform
+   * equivalent that keeps the line's ragged ends.
+   */
+  .draw-underline path {
+    stroke-dasharray: var(--len);
+    stroke-dashoffset: var(--len);
+  }
+
+  .is-visible .draw-underline path {
+    animation: draw-underline 620ms var(--ease-out) 900ms forwards;
+  }
+
+  @keyframes draw-underline {
+    to {
+      stroke-dashoffset: 0;
+    }
+  }
+
+  /* Generic staggered rise for the stat cells and the lower grid. */
+  .paper-rise {
+    --rise-i: 0;
+    opacity: 0;
+    transform: translateY(22px);
+  }
+
+  .is-visible .paper-rise {
+    animation: paper-rise 560ms var(--ease-out) forwards;
+    animation-delay: calc(var(--rise-i) * 90ms + 200ms);
+  }
+
+  @keyframes paper-rise {
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  /* Stat icon leans when you hover its cell. Small, and only on a device that
+     actually has a pointer. */
+  @media (hover: hover) {
+    .stat-cell:hover .stat-icon {
+      transform: rotate(-6deg) scale(1.1);
+    }
+  }
+
+  .stat-icon {
+    transition: transform var(--transition-duration-quick) var(--ease-mech);
+  }
+
+  @media (hover: hover) {
+    .stat-cell:hover .stat-icon {
+      filter: drop-shadow(0 8px 10px rgb(60 50 30 / 0.24));
+    }
+  }
+
+  /* Wet paint button -------------------------------------------------------- */
+
+  /*
+   * The paint reads as liquid because of one thing: the button body, the drips
+   * and the falling drops are all siblings inside a single element carrying an
+   * SVG gooey filter. Blur plus an alpha contrast curve makes overlapping
+   * shapes fuse with a curved neck instead of butting together at a hard edge,
+   * so a drip pulls away from the body the way real paint does.
+   *
+   * The label sits outside that filtered layer. Inside it, the blur would eat
+   * the text.
+   *
+   * The shapes themselves are positioned blocks rather than one SVG, because an
+   * SVG sized to the button would stretch as the label length changes and turn
+   * the round drip ends into ovals.
+   */
+  .wet-btn {
+    position: relative;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    color: #fff;
+    isolation: isolate;
+  }
+
+  .wet-btn__paint {
+    position: absolute;
+    inset: 0;
+    pointer-events: none;
+    /* Chained: fuse the shapes, then cast one shadow over the fused result so
+       the button sits above the ground rather than being printed on it. */
+    filter: url(#wet-goo) drop-shadow(0 10px 18px rgb(90 22 0 / 0.45));
+  }
+
+  .wet-btn__body {
+    position: absolute;
+    inset: 0;
+    border-radius: 1rem;
+    background: var(--color-signal);
+  }
+
+  .wet-btn__drip {
+    position: absolute;
+    /* Anchored to the bottom edge and pulled up just enough to overlap the
+       body, so the filter has something to fuse while the rest of the drip
+       hangs below. Anchoring with `bottom` instead would push the whole drip
+       up inside the button, where the goo swallows it. */
+    top: calc(100% - 0.45rem);
+    width: var(--w);
+    height: var(--h);
+    background: var(--color-signal);
+    border-radius: 0 0 var(--w) var(--w);
+    transform-origin: 50% 0;
+    transition: height 520ms cubic-bezier(0.34, 1.2, 0.64, 1);
+  }
+
+  .wet-btn:hover .wet-btn__drip,
+  .wet-btn:focus-visible .wet-btn__drip {
+    height: calc(var(--h) + var(--grow));
+  }
+
+  /*
+   * A drop that behaves like a drop: it swells at the lip, necks and stretches
+   * as it tears away, accelerates under gravity, then thins out. `ease-in` on
+   * the whole run is the acceleration; the scale pairs are the surface tension.
+   */
+  .wet-btn__drop {
+    position: absolute;
+    top: calc(100% - 0.3rem);
+    left: var(--drop-x);
+    width: 0.6rem;
+    height: 0.6rem;
+    border-radius: 999px;
+    background: var(--color-signal);
+    animation: wet-fall var(--fall, 3.6s) cubic-bezier(0.45, 0, 0.9, 0.6)
+      var(--fall-delay, 0s) infinite;
+  }
+
+  /* Hovering does not just lengthen the drips, it makes the paint run: the
+     drops cycle faster, which is what sells it as wet rather than moulded. */
+  .wet-btn:hover .wet-btn__drop,
+  .wet-btn:focus-visible .wet-btn__drop {
+    animation-duration: calc(var(--fall, 3.6s) * 0.55);
+  }
+
+  @keyframes wet-fall {
+    0%,
+    46% {
+      transform: translate(-50%, 0) scale(0.35, 0.3);
+      opacity: 0;
+    }
+    /* Swells at the lip, still attached. */
+    56% {
+      transform: translate(-50%, 0.35rem) scale(1, 0.85);
+      opacity: 1;
+    }
+    /* Necks: narrows and stretches as surface tension gives. */
+    64% {
+      transform: translate(-50%, 0.9rem) scale(0.78, 1.3);
+      opacity: 1;
+    }
+    /* Falling, still elongated by speed. */
+    86% {
+      transform: translate(-50%, 3rem) scale(0.66, 1.45);
+      opacity: 0.9;
+    }
+    100% {
+      transform: translate(-50%, 4.6rem) scale(0.5, 1.15);
+      opacity: 0;
+    }
+  }
+
+  /* Depth. Outside the goo layer so the filter cannot smear it: a bright top
+     lip where light catches the wet surface, and a darker pooled base. */
+  .wet-btn__gloss {
+    position: absolute;
+    inset: 0;
+    border-radius: 1rem;
+    pointer-events: none;
+    box-shadow:
+      inset 0 2px 0 rgb(255 255 255 / 0.42),
+      inset 0 -5px 10px rgb(120 32 0 / 0.32),
+      inset 0 0 0 1px rgb(255 255 255 / 0.12);
+  }
+
+  .wet-btn__label {
+    position: relative;
+    z-index: 1;
+  }
+
+  /* Centre column ----------------------------------------------------------- */
+
+  /* The headline itself is never animated: it is the LCP element and renders at
+     final opacity. Only the supporting copy and CTA fade up. */
+  .hero-rise {
+    --rise-delay: 0ms;
+    animation: rise var(--transition-duration-base) var(--ease-out) backwards;
+    animation-delay: var(--rise-delay);
+  }
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(16px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+}
+
+/* ---------------------------------------------------------------------------
+   Reduced motion
+
+   Functional requirement, not a nicety. Everything lands in its final state,
+   the hover lift degrades to a border colour change, and SmoothScroll never
+   constructs Lenis.
+   --------------------------------------------------------------------------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 1ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 1ms !important;
+    scroll-behavior: auto !important;
+  }
+
+  .hero-frame:hover,
+  .hero-frame:focus-within {
+    transform: rotate(var(--frame-rot));
+    box-shadow: none;
+  }
+
+  .hero-graphic:hover {
+    transform: rotate(var(--graphic-rot));
+  }
+
+  .hero-drift {
+    animation: none;
+  }
+
+  /* The paint stays put: nothing falls, and hovering does not lengthen the
+     drips. The button still reads as a wet paint button, it just is not wet. */
+  .wet-btn__drop {
+    animation: none;
+    opacity: 0;
+  }
+
+  .wet-btn:hover .wet-btn__drip,
+  .wet-btn:focus-visible .wet-btn__drip {
+    height: var(--h);
+  }
+
+  /* The paper section arrives in its final state. Nothing drops, shudders,
+     draws or pops; the counters render their real figures immediately. */
+  .paper-pop,
+  .pin-drop,
+  .pin-title,
+  .word-rise > span,
+  .paper-rise {
+    opacity: 1;
+    transform: none;
+    animation: none;
+  }
+
+  .pin-impact {
+    display: none;
+  }
+
+  .draw-underline path {
+    stroke-dashoffset: 0;
+    animation: none;
+  }
+
+  .stat-cell:hover .stat-icon {
+    transform: none;
+  }
+
+  .photo-slot:hover {
+    transform: none;
+  }
+}
