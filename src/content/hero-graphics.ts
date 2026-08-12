@@ -33,6 +33,8 @@ export interface HeroSticker {
   readonly width_css: string
   /** Slow idle float. Deliberately true for only two stickers. */
   readonly drift?: boolean
+  /** Optional custom CSS classes for the image (e.g. mix-blend-screen) */
+  readonly className?: string
   /**
    * Placement for the narrow layout, under `lg`.
    *

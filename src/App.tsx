@@ -4,6 +4,7 @@ import { SmoothScroll } from '@/components/SmoothScroll'
 import { AboutPage } from '@/components/about/AboutPage'
 import { StorySoFar } from '@/components/about/StorySoFar'
 import { Hero } from '@/components/hero/Hero'
+import { Footer } from '@/components/layout/Footer'
 import { Logo } from '@/components/ui/logo'
 import { NavBar, type NavItem } from '@/components/ui/tube-light-navbar'
 
@@ -41,6 +42,8 @@ function App() {
         <StorySoFar />
         <AboutPage />
       </main>
+
+      <Footer />
     </>
   )
 }
