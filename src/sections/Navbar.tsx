@@ -39,9 +39,8 @@ export const Navbar = () => {
                 href={item.url}
                 aria-current={isActive ? 'page' : undefined}
                 onClick={() => setActiveTab(item.name)}
-                className={`relative block cursor-pointer rounded-[12px] px-3.5 py-2.5 font-display text-[0.95rem] font-bold tracking-tight transition-colors duration-[120ms] sm:px-7 sm:text-base ${
-                  isActive ? 'text-paper' : 'text-paper/55 hover:text-paper/85'
-                }`}
+                className={`relative block cursor-pointer rounded-[12px] px-3.5 py-2.5 font-display text-[0.95rem] font-bold tracking-tight transition-colors duration-[120ms] sm:px-7 sm:text-base ${isActive ? 'text-paper' : 'text-paper/55 hover:text-paper/85'
+                  }`}
               >
                 <span className="hidden md:inline uppercase">{item.name}</span>
                 <span className="inline-flex md:hidden">
