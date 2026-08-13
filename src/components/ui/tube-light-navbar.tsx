@@ -86,21 +86,12 @@ export function NavBar({ items, className, ariaLabel = 'Primary' }: NavBarProps)
                     initial={false}
                     transition={{ type: 'spring', stiffness: 300, damping: 30 }}
                   >
-                    {/* The tube: a bright bar on the leading edge with three
-                        stacked blurs standing in for its falloff.
-
-                        The glow spills *inward*, away from the edge, which is
-                        both how a real tube throws light onto the surface below
-                        it and what keeps the halo from clipping against the top
-                        of the viewport. */}
-                    <span className="absolute -top-[11px] left-1/2 hidden h-[3.5px] w-14 -translate-x-1/2 rounded-full bg-cream sm:block">
-                      {/* Halo above the tube, then falloff onto the bar below
-                          it. Both directions are bounded by the nav's top
-                          padding, so neither clips against the viewport. */}
-                      <span className="absolute -top-3 left-1/2 h-8 w-24 -translate-x-1/2 rounded-full bg-cream/20 blur-lg" />
-                      <span className="absolute -top-1.5 left-1/2 h-6 w-20 -translate-x-1/2 rounded-full bg-cream/30 blur-md" />
-                      <span className="absolute top-0 left-1/2 h-5 w-14 -translate-x-1/2 rounded-full bg-cream/45 blur-md" />
-                      <span className="absolute top-0 left-1/2 h-2.5 w-9 -translate-x-1/2 rounded-full bg-cream/60 blur-sm" />
+                    {/* The tube: a bright bar with stacked blurs standing in for its falloff. */}
+                    <span className="absolute -bottom-[11px] left-1/2 hidden h-[3.5px] w-14 -translate-x-1/2 rounded-full bg-cream sm:block">
+                      <span className="absolute -bottom-3 left-1/2 h-8 w-24 -translate-x-1/2 rounded-full bg-cream/20 blur-lg" />
+                      <span className="absolute -bottom-1.5 left-1/2 h-6 w-20 -translate-x-1/2 rounded-full bg-cream/30 blur-md" />
+                      <span className="absolute bottom-0 left-1/2 h-5 w-14 -translate-x-1/2 rounded-full bg-cream/45 blur-md" />
+                      <span className="absolute bottom-0 left-1/2 h-2.5 w-9 -translate-x-1/2 rounded-full bg-cream/60 blur-sm" />
                     </span>
                     <span className="absolute -bottom-[11px] left-1/2 h-[3.5px] w-12 -translate-x-1/2 rounded-full bg-cream sm:hidden">
                       <span className="absolute -bottom-3 left-1/2 h-8 w-20 -translate-x-1/2 rounded-full bg-cream/20 blur-lg" />

@@ -7,6 +7,7 @@ import { Hero } from '@/components/hero/Hero'
 import { Footer } from '@/components/layout/Footer'
 import { Logo } from '@/components/ui/logo'
 import { NavBar, type NavItem } from '@/components/ui/tube-light-navbar'
+import { Agentation } from 'agentation'
 
 /**
  * Nav destinations.
@@ -16,7 +17,7 @@ import { NavBar, type NavItem } from '@/components/ui/tube-light-navbar'
  */
 const navItems: NavItem[] = [
   { name: 'Home', url: '#top', icon: Home },
-  { name: 'About Us', url: '#about-page', icon: Users },
+  { name: 'About Us', url: '#about', icon: Users },
   { name: 'Programs', url: '#programs', icon: Rocket },
   { name: 'Work', url: '#work', icon: Briefcase },
   { name: 'Team', url: '#team', icon: Users },
@@ -44,6 +45,7 @@ function App() {
       </main>
 
       <Footer />
+      {import.meta.env.DEV && <Agentation />}
     </>
   )
 }

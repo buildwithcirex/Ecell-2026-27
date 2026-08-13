@@ -16,6 +16,7 @@
 import { ExternalLink, Mail, MapPin } from 'lucide-react'
 import { DoodleGraphic } from '../hero/DoodleGraphic'
 import { footerStickers } from '@/content/footer-graphics'
+import footerBg from '@/assets/footer/grp photo.jpeg'
 
 // ---------------------------------------------------------------------------
 // Data
@@ -82,14 +83,12 @@ function FooterTear() {
 
 function FooterBackground() {
   return (
-    <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden">
+    <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 overflow-hidden bg-ink">
       <div
-        className="absolute inset-0"
-        style={{
-          background:
-            'radial-gradient(ellipse 95% 75% at 50% 18%, var(--color-hero-bright) 0%, var(--color-hero-blue) 38%, var(--color-hero-mid) 72%, var(--color-hero-deep) 100%)',
-        }}
+        className="absolute inset-0 bg-cover bg-[center_top] bg-no-repeat"
+        style={{ backgroundImage: `url('${footerBg}')` }}
       />
+      <div className="absolute inset-0 bg-ink/75" />
     </div>
   )
 }
@@ -102,7 +101,7 @@ export function Footer() {
   const currentYear = new Date().getFullYear()
 
   return (
-    <footer className="relative bg-[#08182b] text-cream overflow-hidden">
+    <footer className="relative bg-ink text-cream overflow-hidden flex flex-col justify-end min-h-[95svh]">
       <FooterBackground />
       <FooterTear />
 
@@ -162,7 +161,7 @@ export function Footer() {
       </div>
 
       {/* Upper body */}
-      <div className="mx-auto w-full max-w-screen-xl px-5 sm:px-8 pt-32 sm:pt-40 lg:pt-48 relative z-10">
+      <div className="mx-auto w-full max-w-screen-xl px-5 sm:px-8 pt-48 sm:pt-64 lg:pt-[24rem] relative z-10 mt-auto">
 
         {/* Brand + CTA row */}
         <div className="flex flex-col md:flex-row md:items-start md:justify-between gap-10 pb-12 border-b border-white/10">
@@ -205,7 +204,22 @@ export function Footer() {
         </div>
 
         {/* Navigation grid + proof list */}
-        <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 pt-12 pb-16 gap-x-8 gap-y-12">
+        <div className="relative">
+          {/* Oversized wordmark — closing device, aria-hidden */}
+          <div
+            aria-hidden="true"
+            className="absolute inset-0 flex items-center justify-center overflow-hidden select-none pointer-events-none z-0"
+          >
+            <p
+              className="font-display font-extrabold leading-none tracking-[-0.04em] text-cream whitespace-nowrap px-4 sm:px-6 py-2"
+              style={{ fontSize: 'clamp(5rem, 22vw, 18rem)', opacity: 0.15 }}
+            >
+              E-Cell
+            </p>
+          </div>
+
+          <div className="bg-ink border border-white/10 p-8 sm:p-12 relative z-10 shadow-2xl">
+            <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-4 gap-x-8 gap-y-12">
 
           {/* Column 1: Menu */}
           <div className="flex flex-col gap-4">
@@ -283,6 +297,8 @@ export function Footer() {
               ))}
             </ul>
           </div>
+          </div>
+          </div>
         </div>
       </div>
 
@@ -313,18 +329,6 @@ export function Footer() {
         </div>
       </div>
 
-      {/* Oversized wordmark — closing device, aria-hidden */}
-      <div
-        aria-hidden="true"
-        className="w-full overflow-hidden select-none pointer-events-none relative z-10"
-      >
-        <p
-          className="font-display font-extrabold leading-none tracking-[-0.04em] text-cream whitespace-nowrap px-4 sm:px-6 py-2"
-          style={{ fontSize: 'clamp(5rem, 22vw, 18rem)', opacity: 0.30 }}
-        >
-          E-Cell
-        </p>
-      </div>
     </footer>
   )
 }
