@@ -3,6 +3,8 @@ import gsap from 'gsap'
 import { ScrollTrigger } from 'gsap/ScrollTrigger'
 import { MapPin, Sparkles } from 'lucide-react'
 
+import paper1 from '@/assets/about-page/paper-1-clean.png'
+import paper2 from '@/assets/about-page/paper-2-clean.png'
 import { HeroBackground } from '@/components/hero/HeroBackground'
 import { WetPaintButton } from '@/components/ui/wet-paint-button'
 import { cn } from '@/lib/utils'
@@ -55,7 +57,7 @@ function QuirkyImageFrame({
   return (
     <div
       data-comment={commentTag}
-      className={cn('relative m-0 inline-block bg-paper p-2.5 shadow-xl transition-transform hover:scale-105', className)}
+      className={cn('relative m-0 inline-block bg-paper p-2 shadow-xl transition-transform hover:scale-105', className)}
       style={{
         transform: `rotate(${rotate}deg)`,
         clipPath: QuirkyClipPaths[clipIndex % QuirkyClipPaths.length],
@@ -81,14 +83,14 @@ function QuirkyImageFrame({
         Paste user image tag <img src="..." alt="..." /> inside this container.
         ========================================================================
       */}
-      <div className="group relative flex aspect-[4/3] w-full min-w-[140px] items-center justify-center rounded-[2px] border border-dashed border-graphite/30 bg-graphite/[0.04] p-3.5 text-center transition-colors hover:border-signal/50">
-        <div className="flex flex-col items-center gap-1.5">
-          <Sparkles className="h-4 w-4 text-graphite/40 transition-colors group-hover:text-signal" />
-          <p className="font-body text-[10px] leading-tight tracking-[0.14em] text-graphite/60 uppercase group-hover:text-ink">
+      <div className="group relative flex aspect-[4/3] w-full min-w-[120px] items-center justify-center rounded-[2px] border border-dashed border-graphite/30 bg-graphite/[0.04] p-2.5 text-center transition-colors hover:border-signal/50">
+        <div className="flex flex-col items-center gap-1">
+          <Sparkles className="h-3.5 w-3.5 text-graphite/40 transition-colors group-hover:text-signal" />
+          <p className="font-body text-[9px] leading-tight tracking-[0.14em] text-graphite/60 uppercase group-hover:text-ink">
             {placeholderText}
           </p>
-          <span className="font-mono text-[9px] text-graphite/40">
-            [Drop Image Here]
+          <span className="font-mono text-[8px] text-graphite/40">
+            [Drop Image]
           </span>
         </div>
       </div>
@@ -99,6 +101,7 @@ function QuirkyImageFrame({
 /**
  * About Us Page Landing Section featuring Jackie Zhang inspired 3D physics book.
  * Fully scrollable, unpinned, responsive 3D hinge animation with symmetrical equal page heights.
+ * Mission and Vision cards use clean transparent paper assets paper-1.png & paper-2.png.
  */
 export function AboutBookHero() {
   const containerRef = useRef<HTMLDivElement>(null)
@@ -368,7 +371,7 @@ export function AboutBookHero() {
                     radial-gradient(circle, rgba(51, 55, 60, 0.08) 1px, transparent 1px),
                     linear-gradient(to right, transparent, rgba(51, 55, 60, 0.03) 50%, transparent 100%)
                   `,
-                  backgroundSize: '24px 24px, 100% 100%',
+                  backgroundSize: '100px 24px, 100% 100%',
                   boxShadow: `
                     0 26px 55px -4px rgba(0, 0, 0, 0.65),
                     0 8px 22px rgba(0, 0, 0, 0.3),
@@ -398,101 +401,119 @@ export function AboutBookHero() {
                   <PencilAtom className="h-9 w-9 md:h-10 md:w-10 text-graphite/30" />
                 </div>
 
-                {/* Jackie Zhang Style Cutout Cards Grid for Mission & Vision */}
+                {/* Jackie Zhang Style Cutout Cards Grid for Mission & Vision with Clean Transparent Paper-1 and Paper-2 */}
                 <div className="grid gap-6 md:grid-cols-2 lg:gap-8 my-auto">
                   {/* 
                     PAPER CUTOUT 1: OUR MISSION
-                    Styled like a ripped lined notepad paper clip-on
+                    Using clean transparent paper-1.png as physical paper card
                   */}
-                  <div className="book-pop-item relative rounded-lg border border-graphite/20 bg-[#fefcf8] p-5 md:p-6 shadow-md transition-transform hover:-translate-y-1">
-                    {/* Tape top */}
-                    <span
-                      aria-hidden="true"
-                      className="absolute -top-3 left-6 h-5 w-20 rotate-[-4deg] bg-[#e8e0cc]/85 backdrop-blur-[1px] shadow-sm border-t border-b border-black/10"
+                  <div className="book-pop-item relative flex flex-col justify-between p-6 md:p-9 lg:p-10 min-h-[380px] md:min-h-[420px] transition-transform hover:-translate-y-1">
+                    {/* Background Paper Asset: paper-1.png (Clean Transparent PNG) */}
+                    <img
+                      src={paper1}
+                      alt=""
+                      className="pointer-events-none absolute inset-0 h-full w-full object-fill drop-shadow-xl z-0"
                     />
-                    <div className="mb-3 flex items-center justify-between border-b border-graphite/10 pb-2">
-                      <h3 className="font-display text-base md:text-xl font-bold tracking-tight text-ink">
-                        OUR MISSION
-                      </h3>
-                      <PencilPaperPlane className="h-5 w-5 md:h-6 md:w-6 text-signal" />
-                    </div>
-                    <p className="font-body text-xs md:text-base leading-relaxed text-graphite/90">
-                      To ignite the entrepreneurial flame in every student—demystifying build culture, 
-                      providing the stack, mentorship, and ecosystem to ship bold ideas without asking for permission.
-                    </p>
 
-                    {/* 
-                      IMAGE PLACEHOLDER 3: Mission Action Shot / Hackathon Crowd
-                    */}
-                    <div className="mt-3 md:mt-4 flex flex-wrap items-center gap-3">
-                      <QuirkyImageFrame
-                        placeholderText="Mission Action"
-                        commentTag="IMAGE PLACEHOLDER 3: Mission Action Shot / Hackathon Crowd"
-                        rotate={-3}
-                        clipIndex={2}
-                        className="w-full max-w-[150px] md:max-w-[170px]"
-                        hasTape={false}
-                      />
+                    {/* Content Overlaid 100% inside paper-1.png margins */}
+                    <div className="relative z-10 flex flex-col justify-between h-full space-y-4">
+                      <div>
+                        {/* Tape top */}
+                        <span
+                          aria-hidden="true"
+                          className="absolute -top-3 left-4 h-5 w-20 rotate-[-4deg] bg-[#e8e0cc]/90 backdrop-blur-[1px] shadow-sm border-t border-b border-black/10 z-20"
+                        />
+                        <div className="mb-3 flex items-center justify-between border-b border-graphite/20 pb-2">
+                          <h3 className="font-display text-xl md:text-2xl font-extrabold tracking-tight text-ink">
+                            OUR MISSION
+                          </h3>
+                          <PencilPaperPlane className="h-6 w-6 text-signal" />
+                        </div>
+                        <p className="font-body text-xs md:text-sm lg:text-base leading-relaxed text-ink font-semibold max-w-[34ch]">
+                          To ignite the entrepreneurial flame in every student—demystifying build culture, 
+                          providing the stack, mentorship, and ecosystem to ship bold ideas without asking for permission.
+                        </p>
+                      </div>
 
                       {/* 
-                        IMAGE PLACEHOLDER 4: Mentorship & Pairing
+                        IMAGE PLACEHOLDER 3 & 4: Mission Photo Frames
                       */}
-                      <QuirkyImageFrame
-                        placeholderText="Mentorship"
-                        commentTag="IMAGE PLACEHOLDER 4: Community Mentorship Session"
-                        rotate={3}
-                        clipIndex={3}
-                        className="w-full max-w-[140px] md:max-w-[160px]"
-                        hasTape={false}
-                      />
+                      <div className="flex flex-wrap items-center gap-2 pt-2">
+                        <QuirkyImageFrame
+                          placeholderText="Mission Action"
+                          commentTag="IMAGE PLACEHOLDER 3: Mission Action Shot / Hackathon Crowd"
+                          rotate={-3}
+                          clipIndex={2}
+                          className="w-full max-w-[130px] md:max-w-[150px]"
+                          hasTape={false}
+                        />
+
+                        <QuirkyImageFrame
+                          placeholderText="Mentorship"
+                          commentTag="IMAGE PLACEHOLDER 4: Community Mentorship Session"
+                          rotate={3}
+                          clipIndex={3}
+                          className="w-full max-w-[120px] md:max-w-[140px]"
+                          hasTape={false}
+                        />
+                      </div>
                     </div>
                   </div>
 
                   {/* 
                     PAPER CUTOUT 2: OUR VISION
-                    Styled like a grid paper cutout pinned with a red push-pin
+                    Using clean transparent paper-2.png as physical paper card
                   */}
-                  <div className="book-pop-item relative rounded-lg border border-graphite/20 bg-[#faf6ee] p-5 md:p-6 shadow-md transition-transform hover:-translate-y-1">
-                    {/* Push Pin */}
-                    <div className="absolute -top-4 right-8 z-10">
-                      <PushPin className="h-7 w-7 md:h-8 md:w-8" />
-                    </div>
+                  <div className="book-pop-item relative flex flex-col justify-between p-6 md:p-9 lg:p-10 min-h-[380px] md:min-h-[420px] transition-transform hover:-translate-y-1">
+                    {/* Background Paper Asset: paper-2.png (Clean Transparent PNG) */}
+                    <img
+                      src={paper2}
+                      alt=""
+                      className="pointer-events-none absolute inset-0 h-full w-full object-fill drop-shadow-xl z-0"
+                    />
 
-                    <div className="mb-3 flex items-center justify-between border-b border-graphite/10 pb-2">
-                      <h3 className="font-display text-base md:text-xl font-bold tracking-tight text-ink">
-                        OUR VISION
-                      </h3>
-                      <PencilBrainAI className="h-5 w-5 md:h-6 md:w-6 text-signal" />
-                    </div>
-                    <p className="font-body text-xs md:text-base leading-relaxed text-graphite/90">
-                      To build Thane&apos;s premier student innovation hub—where college labs transform into venture launchpads, 
-                      and the next generation of AI &amp; tech pioneers are forged.
-                    </p>
+                    {/* Content Overlaid 100% inside paper-2.png margins */}
+                    <div className="relative z-10 flex flex-col justify-between h-full space-y-4">
+                      <div>
+                        {/* Push Pin */}
+                        <div className="absolute -top-4 right-4 z-20">
+                          <PushPin className="h-8 w-8 text-signal" />
+                        </div>
 
-                    {/* 
-                      IMAGE PLACEHOLDER 5: Vision & Pitch Stage Presentation
-                    */}
-                    <div className="mt-3 md:mt-4 flex flex-wrap items-center gap-3">
-                      <QuirkyImageFrame
-                        placeholderText="Vision Pitch"
-                        commentTag="IMAGE PLACEHOLDER 5: Vision Pitch Presentation Stage"
-                        rotate={4}
-                        clipIndex={0}
-                        className="w-full max-w-[150px] md:max-w-[170px]"
-                        hasTape={false}
-                      />
+                        <div className="mb-3 flex items-center justify-between border-b border-graphite/20 pb-2">
+                          <h3 className="font-display text-xl md:text-2xl font-extrabold tracking-tight text-ink">
+                            OUR VISION
+                          </h3>
+                          <PencilBrainAI className="h-6 w-6 text-signal" />
+                        </div>
+                        <p className="font-body text-xs md:text-sm lg:text-base leading-relaxed text-ink font-semibold max-w-[34ch]">
+                          To build Thane&apos;s premier student innovation hub—where college labs transform into venture launchpads, 
+                          and the next generation of AI &amp; tech pioneers are forged.
+                        </p>
+                      </div>
 
                       {/* 
-                        IMAGE PLACEHOLDER 6: Prototype Demo
+                        IMAGE PLACEHOLDER 5 & 6: Vision Photo Frames
                       */}
-                      <QuirkyImageFrame
-                        placeholderText="Prototype Demo"
-                        commentTag="IMAGE PLACEHOLDER 6: Prototype Demo & Testing"
-                        rotate={-2}
-                        clipIndex={1}
-                        className="w-full max-w-[140px] md:max-w-[160px]"
-                        hasTape={false}
-                      />
+                      <div className="flex flex-wrap items-center gap-2 pt-2">
+                        <QuirkyImageFrame
+                          placeholderText="Vision Pitch"
+                          commentTag="IMAGE PLACEHOLDER 5: Vision Pitch Presentation Stage"
+                          rotate={4}
+                          clipIndex={0}
+                          className="w-full max-w-[130px] md:max-w-[150px]"
+                          hasTape={false}
+                        />
+
+                        <QuirkyImageFrame
+                          placeholderText="Prototype Demo"
+                          commentTag="IMAGE PLACEHOLDER 6: Prototype Demo & Testing"
+                          rotate={-2}
+                          clipIndex={1}
+                          className="w-full max-w-[120px] md:max-w-[140px]"
+                          hasTape={false}
+                        />
+                      </div>
                     </div>
                   </div>
                 </div>
