@@ -1,19 +1,12 @@
 import { useEffect } from 'react'
 import Lenis from 'lenis'
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
 
 /**
- * Site-wide smooth scroll.
- *
- * Mounted once. Renders nothing.
- *
- * Two things worth being explicit about:
- *
- *   1. Under `prefers-reduced-motion` Lenis is never constructed at all. Hijacked
- *      scrolling is exactly what that setting exists to opt out of, so disabling
- *      it after the fact is not good enough.
- *   2. The rAF handle is captured in a local and cancelled on cleanup. An
- *      uncancelled loop survives unmount and, under StrictMode's double-invoke in
- *      development, you end up with two loops driving one destroyed instance.
+ * Site-wide smooth scroll synced with GSAP ScrollTrigger.
  */
 export function SmoothScroll() {
   useEffect(() => {
@@ -25,18 +18,19 @@ export function SmoothScroll() {
 
     const lenis = new Lenis({ lerp: 0.12, smoothWheel: true })
 
-    let frame = 0
-    const raf = (time: number) => {
-      lenis.raf(time)
-      frame = requestAnimationFrame(raf)
-    }
-    frame = requestAnimationFrame(raf)
+    // Sync Lenis scroll updates with GSAP ScrollTrigger
+    lenis.on('scroll', ScrollTrigger.update)
+
+    gsap.ticker.add((time) => {
+      lenis.raf(time * 1000)
+    })
+    gsap.ticker.lagSmoothing(0)
 
     return () => {
-      cancelAnimationFrame(frame)
       lenis.destroy()
     }
   }, [])
 
   return null
 }
+

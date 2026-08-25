@@ -295,3 +295,60 @@ export function PencilStickyNote({ className }: ArtProps) {
     </svg>
   )
 }
+
+export function PencilBrainAI({ className }: ArtProps) {
+  return (
+    <svg viewBox="0 0 80 80" className={className} style={pencil} {...stroke}>
+      <path d="M40 12c-8 0-14 5-14 12 0 2 .4 4 1.2 5.8C22 31 18 36 18 42c0 6 4 11 9.5 13C27 58 30 64 38 64h4c8 0 11-6 10.5-9C58 53 62 48 62 42c0-6-4-11-9.2-12.2.8-1.8 1.2-3.8 1.2-5.8 0-7-6-12-14-12Z" />
+      <path d="M40 12v52" strokeDasharray="3 3" opacity="0.6" />
+      <path d="M28 28c4 3 8 3 12 0M40 40c4 4 8 4 12 0M26 48c4 2 8 2 14 0" opacity="0.7" />
+    </svg>
+  )
+}
+
+export function PencilCodeTerminal({ className }: ArtProps) {
+  return (
+    <svg viewBox="0 0 80 64" className={className} style={pencil} {...stroke}>
+      <rect x="6" y="6" width="68" height="52" rx="4" />
+      <path d="M6 18h68" />
+      <circle cx="14" cy="12" r="2" fill="currentColor" />
+      <circle cx="22" cy="12" r="2" fill="currentColor" />
+      <circle cx="30" cy="12" r="2" fill="currentColor" />
+      <path d="m18 30 8 7-8 7M32 44h16" strokeWidth={2.5} />
+    </svg>
+  )
+}
+
+export function PencilGraduationCap({ className }: ArtProps) {
+  return (
+    <svg viewBox="0 0 84 68" className={className} style={pencil} {...stroke}>
+      <path d="M42 8 6 26l36 18 36-18Z" />
+      <path d="M18 33v18c0 6 11 11 24 11s24-5 24-11V33" />
+      <path d="M70 27v24" strokeWidth={2.5} />
+      <circle cx="70" cy="53" r="3" />
+    </svg>
+  )
+}
+
+export function PencilCoffeeMug({ className }: ArtProps) {
+  return (
+    <svg viewBox="0 0 72 72" className={className} style={pencil} {...stroke}>
+      <path d="M14 20h38v32c0 8-6 14-14 14h-10c-8 0-14-6-14-14V20Z" />
+      <path d="M52 26h8c4 0 7 3 7 7v4c0 4-3 7-7 7h-8" />
+      {/* Steam */}
+      <path d="M24 12c1-3-1-5 0-8M33 12c1-3-1-5 0-8M42 12c1-3-1-5 0-8" opacity="0.6" />
+    </svg>
+  )
+}
+
+export function PencilSparkles({ className }: ArtProps) {
+  return (
+    <svg viewBox="0 0 64 64" className={className} style={pencil} {...stroke}>
+      <path d="M32 6c1 11 7 17 18 18-11 1-17 7-18 18-1-11-7-17-18-18 11-1 17-7 18-18Z" fill="currentColor" opacity="0.15" />
+      <path d="M32 6c1 11 7 17 18 18-11 1-17 7-18 18-1-11-7-17-18-18 11-1 17-7 18-18Z" />
+      <path d="M12 8c.5 4 2.5 6 6.5 6.5-4 .5-6 2.5-6.5 6.5C11.5 17 9.5 15 5.5 14.5 9.5 14 11.5 12 12 8Z" opacity="0.8" />
+      <path d="M50 42c.5 3 2 4.5 5 5-3 .5-4.5 2-5 5-.5-3-2-4.5-5-5 3-.5 4.5-2 5-5Z" opacity="0.7" />
+    </svg>
+  )
+}
+

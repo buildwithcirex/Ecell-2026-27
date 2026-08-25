@@ -1,6 +1,9 @@
-import { Briefcase, Home, Rocket, Users } from 'lucide-react'
+import { useState, useEffect } from 'react'
+import { Briefcase, Home, Info, Rocket, Users } from 'lucide-react'
+import { Agentation } from 'agentation'
 
 import { SmoothScroll } from '@/components/SmoothScroll'
+import { AboutBookHero } from '@/components/about/AboutBookHero'
 import { StorySoFar } from '@/components/about/StorySoFar'
 import { Hero } from '@/components/hero/Hero'
 import { Logo } from '@/components/ui/logo'
@@ -8,21 +11,39 @@ import { NavBar, type NavItem } from '@/components/ui/tube-light-navbar'
 
 /**
  * Nav destinations.
- *
- * These are in-page anchors for now: the routes they will eventually point at do
- * not exist yet, and linking to a 404 is worse than linking to nothing.
  */
 const navItems: NavItem[] = [
   { name: 'Home', url: '#top', icon: Home },
+  { name: 'About', url: '#about', icon: Info },
   { name: 'Programs', url: '#programs', icon: Rocket },
   { name: 'Work', url: '#work', icon: Briefcase },
   { name: 'Team', url: '#team', icon: Users },
 ]
 
 function App() {
+  const [currentView, setCurrentView] = useState<'home' | 'about'>('home')
+
+  useEffect(() => {
+    const handleHash = () => {
+      const hash = window.location.hash
+      if (hash === '#about') {
+        setCurrentView('about')
+      } else if (hash === '#home' || hash === '#top' || !hash) {
+        setCurrentView('home')
+      }
+    }
+
+    handleHash()
+    window.addEventListener('hashchange', handleHash)
+    return () => window.removeEventListener('hashchange', handleHash)
+  }, [])
+
   return (
     <>
       <SmoothScroll />
+
+      {/* Agentation dev toolbar */}
+      {import.meta.env.DEV && <Agentation />}
 
       <a
         href="#hero-heading"
@@ -35,11 +56,20 @@ function App() {
       <NavBar items={navItems} />
 
       <main id="top">
-        <Hero />
-        <StorySoFar />
+        {currentView === 'about' ? (
+          <AboutBookHero />
+        ) : (
+          <>
+            <Hero />
+            <StorySoFar />
+          </>
+        )}
       </main>
     </>
   )
 }
 
 export default App
+
+
+
