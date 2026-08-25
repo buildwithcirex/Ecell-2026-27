@@ -28,8 +28,11 @@ function App() {
       const hash = window.location.hash
       if (hash === '#about') {
         setCurrentView('about')
+        // Always land cleanly at the top of the page when opening About
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
       } else if (hash === '#home' || hash === '#top' || !hash) {
         setCurrentView('home')
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
       }
     }
 
@@ -70,6 +73,3 @@ function App() {
 }
 
 export default App
-
-
-

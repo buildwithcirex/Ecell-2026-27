@@ -1,4 +1,4 @@
-import { useState } from 'react'
+import { useEffect, useState } from 'react'
 import { motion } from 'motion/react'
 import type { LucideIcon } from 'lucide-react'
 
@@ -28,9 +28,38 @@ export interface NavBarProps {
  * DOM positions, which CSS transitions cannot express.
  */
 export function NavBar({ items, className, ariaLabel = 'Primary' }: NavBarProps) {
-  // Optional chaining matters: an empty `items` array would otherwise throw on
-  // first render rather than degrading to an empty bar.
-  const [activeTab, setActiveTab] = useState(items[0]?.name ?? '')
+  // Synchronize initial active tab with URL hash on reload/mount
+  const [activeTab, setActiveTab] = useState(() => {
+    if (typeof window === 'undefined') return items[0]?.name ?? ''
+    const hash = window.location.hash.toLowerCase()
+    const found = items.find((item) => item.url.toLowerCase() === hash)
+    if (found) return found.name
+    if (hash === '#about') return 'About'
+    return items[0]?.name ?? 'Home'
+  })
+
+  // Sync active tab state whenever the URL hash or navigation changes
+  useEffect(() => {
+    const syncTabWithUrl = () => {
+      const hash = window.location.hash.toLowerCase()
+      const found = items.find((item) => item.url.toLowerCase() === hash)
+      if (found) {
+        setActiveTab(found.name)
+      } else if (hash === '#about') {
+        setActiveTab('About')
+      } else if (!hash || hash === '#top' || hash === '#home') {
+        setActiveTab('Home')
+      }
+    }
+
+    syncTabWithUrl()
+    window.addEventListener('hashchange', syncTabWithUrl)
+    window.addEventListener('popstate', syncTabWithUrl)
+    return () => {
+      window.removeEventListener('hashchange', syncTabWithUrl)
+      window.removeEventListener('popstate', syncTabWithUrl)
+    }
+  }, [items])
 
   return (
     <nav
