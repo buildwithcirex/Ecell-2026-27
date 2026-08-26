@@ -7,7 +7,6 @@ import { MapPin, Sparkles } from 'lucide-react'
 import mobilePaper from '@/assets/about-page/mobile-paper.png'
 import paper1 from '@/assets/about-page/paper-1-clean.png'
 import paper2 from '@/assets/about-page/paper-2-clean.png'
-import { HeroBackground } from '@/components/hero/HeroBackground'
 import { WetPaintButton } from '@/components/ui/wet-paint-button'
 import { cn } from '@/lib/utils'
 import {
@@ -223,14 +222,11 @@ export function AboutBookHero() {
     <section
       ref={sectionRef}
       className={cn(
-        'relative w-full bg-hero-deep text-cream font-body pt-4 md:pt-10 pb-16 md:pb-24 overflow-hidden',
+        'relative w-full text-cream font-body pt-4 md:pt-10 pb-6 md:pb-10 overflow-hidden',
         inView && 'is-visible',
       )}
     >
       <PencilDefs />
-
-      {/* Deep Blue Wash Landing Background */}
-      <HeroBackground />
 
       {/* Loose Pencil Doodles in Section Ground */}
       <div aria-hidden="true" className="pointer-events-none absolute inset-0 z-0 text-steel/30">
@@ -331,8 +327,9 @@ export function AboutBookHero() {
                 <div className="relative z-10 space-y-3">
                   <h3 className="font-display text-lg font-extrabold text-ink">OUR MISSION</h3>
                   <p className="font-body text-xs leading-relaxed text-ink font-semibold">
-                    To ignite the entrepreneurial flame in every student—demystifying build culture, 
-                    providing the stack, mentorship, and ecosystem to ship bold ideas without asking for permission.
+                    The Entrepreneurship Cell at KCCEMSR is dedicated to fostering an entrepreneurial mindset among students. We provide a comprehensive platform that nurtures innovative ideas, facilitates startup development, and connects aspiring entrepreneurs with industry experts and resources.
+
+Through workshops, seminars, competitions, and mentorship programs, we aim to create a vibrant ecosystem where creativity meets opportunity, and ideas transform into impactful ventures
                   </p>
                   <div className="flex flex-wrap items-center justify-center gap-2 pt-2 overflow-visible">
                     <QuirkyImageFrame placeholderText="Mission Action" commentTag="IMAGE PLACEHOLDER 3" rotate={-2} clipIndex={2} className="w-full max-w-[125px]" hasTape={false} />

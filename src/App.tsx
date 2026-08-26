@@ -4,6 +4,7 @@ import { Agentation } from 'agentation'
 
 import { SmoothScroll } from '@/components/SmoothScroll'
 import { AboutBookHero } from '@/components/about/AboutBookHero'
+import { AboutHistoryTimeline } from '@/components/about/AboutHistoryTimeline'
 import { StorySoFar } from '@/components/about/StorySoFar'
 import { Hero } from '@/components/hero/Hero'
 import { Logo } from '@/components/ui/logo'
@@ -60,7 +61,22 @@ function App() {
 
       <main id="top">
         {currentView === 'about' ? (
-          <AboutBookHero />
+          <div className="relative w-full min-h-screen bg-hero-deep text-cream overflow-hidden">
+            {/* Seamless continuous ambient wash that naturally lightens down the timeline */}
+            <div
+              aria-hidden="true"
+              className="pointer-events-none absolute inset-0 z-0 select-none"
+              style={{
+                background: `
+                  radial-gradient(ellipse 95% 38% at 50% 14%, #2468cc 0%, #16408a 38%, transparent 75%),
+                  radial-gradient(ellipse 90% 55% at 50% 60%, #1c4fa2 0%, #123777 45%, transparent 80%),
+                  linear-gradient(180deg, #060c1c 0%, #0c1c3f 8%, #153a7b 20%, #1b4f9e 42%, #18448f 66%, #0e2652 86%, #060c1c 100%)
+                `,
+              }}
+            />
+            <AboutBookHero />
+            <AboutHistoryTimeline />
+          </div>
         ) : (
           <>
             <Hero />
