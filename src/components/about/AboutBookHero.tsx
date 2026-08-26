@@ -37,12 +37,11 @@ const QuirkyClipPaths = [
 
 /**
  * True once the element has reached the viewport for scroll reveals.
+ * Defaults to true so top section elements never get stuck at opacity 0 on reload.
  */
 function useInView<T extends HTMLElement>() {
   const ref = useRef<T>(null)
-  const [inView, setInView] = useState(
-    () => typeof IntersectionObserver === 'undefined',
-  )
+  const [inView, setInView] = useState(true)
 
   useEffect(() => {
     const el = ref.current
@@ -55,7 +54,7 @@ function useInView<T extends HTMLElement>() {
           observer.disconnect()
         }
       },
-      { threshold: 0.1, rootMargin: '0px 0px -5% 0px' },
+      { threshold: 0.05 },
     )
 
     observer.observe(el)
@@ -148,55 +147,42 @@ export function AboutBookHero() {
 
       const book = bookRef.current
       const bottomPage = bottomPageRef.current
-      const container = sectionRef.current
-      if (!book || !container || !bottomPage) return
+      const bottomWrapper = bottomSpreadWrapperRef.current
+      if (!book || !bottomPage || !bottomWrapper) return
 
-      // Initial 3D posture for bottom page sheet (no layout reflow height animation)
+      // Smooth initial mount animation for top book
+      gsap.fromTo(
+        book,
+        { rotateX: 10, scale: 0.98, opacity: 0.9 },
+        { rotateX: 0, rotateY: 0, scale: 1, opacity: 1, duration: 0.8, ease: 'power2.out' },
+      )
+
+      // Unfold lower page spread smoothly as user scrolls down to Mission & Vision
       gsap.set(bottomPage, {
-        rotateX: -30,
-        translateY: -20,
-        opacity: 0.4,
+        rotateX: -24,
+        translateY: -15,
+        opacity: 0.6,
         transformOrigin: 'top center',
-        willChange: 'transform, opacity',
       })
 
-      // GPU-accelerated 60 FPS ScrollTrigger timeline with light scrub distance
       const tl = gsap.timeline({
         scrollTrigger: {
-          trigger: container,
-          start: 'top 80%',
-          end: 'top 35%',
+          trigger: bottomWrapper,
+          start: 'top 85%',
+          end: 'top 45%',
           scrub: 0.4,
         },
       })
 
-      // 1. Book rotates smoothly from initial 3D pitch to flat open view
-      tl.to(
-        book,
-        {
-          rotateX: 0,
-          rotateY: 0,
-          scale: 1,
-          duration: 0.8,
-          ease: 'power2.out',
-        },
-        0,
-      )
+      tl.to(bottomPage, {
+        rotateX: 0,
+        translateY: 0,
+        opacity: 1,
+        duration: 0.8,
+        ease: 'power2.out',
+      })
 
-      // 2. Unfold lower page spread instantly and smoothly in 3D
-      tl.to(
-        bottomPage,
-        {
-          rotateX: 0,
-          translateY: 0,
-          opacity: 1,
-          duration: 0.8,
-          ease: 'power2.out',
-        },
-        0.1,
-      )
-
-      // 3. Staggered pop-in for cutouts & frames inside the book
+      // Pop-in for cutouts & frames inside the bottom page
       if (contentsRef.current) {
         const elements = contentsRef.current.querySelectorAll('.book-pop-item')
         tl.fromTo(
@@ -210,7 +196,7 @@ export function AboutBookHero() {
             duration: 0.6,
             ease: 'power3.out',
           },
-          0.3,
+          0.2,
         )
       }
     }, sectionRef)
@@ -383,7 +369,7 @@ Through workshops, seminars, competitions, and mentorship programs, we aim to cr
               inset 0 0 50px rgba(0, 0, 0, 0.6)
             `,
             perspective: '1600px',
-            transform: 'rotateX(14deg) rotateY(-2deg) scale(0.96)',
+            transform: 'rotateX(0deg) rotateY(0deg) scale(1)',
             transformStyle: 'preserve-3d',
           }}
         >

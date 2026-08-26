@@ -109,7 +109,7 @@ export function AboutHistoryTimeline() {
   const cardsRef = useRef<(HTMLDivElement | null)[]>([])
   const dotsRef = useRef<(SVGGElement | null)[]>([])
 
-  const [isMobile, setIsMobile] = useState(false)
+  const [isMobile, setIsMobile] = useState(() => typeof window !== 'undefined' && window.innerWidth < 768)
   const isScrollingRef = useRef(false)
   const scrollTimeoutRef = useRef<number | null>(null)
 
@@ -118,8 +118,7 @@ export function AboutHistoryTimeline() {
     const checkMobile = () => {
       setIsMobile(window.innerWidth < 768)
     }
-    checkMobile()
-    window.addEventListener('resize', checkMobile)
+    window.addEventListener('resize', checkMobile, { passive: true })
     return () => window.removeEventListener('resize', checkMobile)
   }, [])
 
@@ -195,24 +194,26 @@ export function AboutHistoryTimeline() {
 
     const totalLength = path.getTotalLength()
 
-    // Measure exact arc lengths for each milestone on the SVG path
-    const dotLengths: number[] = []
-    const step = 2
-    for (let i = 0; i < milestonePoints.length; i++) {
-      const ptTarget = milestonePoints[i]
-      let bestDist = Infinity
-      let bestLength = (i / milestonePoints.length) * totalLength
-
-      for (let l = 0; l <= totalLength; l += step) {
-        const p = path.getPointAtLength(l)
-        const d = (p.x - ptTarget.x) ** 2 + (p.y - ptTarget.y) ** 2
-        if (d < bestDist) {
-          bestDist = d
-          bestLength = l
-        }
+    // Fast, zero-lag analytical arc-length milestones (0 blocking iterations)
+    const dotLengths: number[] = MILESTONES.map((_, i) => {
+      if (isMobile) {
+        return (milestonePoints[i]?.y ?? 0) - 30
       }
-      dotLengths.push(bestLength)
+      return ((i + 0.6) / (MILESTONES.length + 0.4)) * totalLength
+    })
+
+    // Cache scale metrics to avoid layout reflows in onUpdate
+    let scaleX = 1
+    let scaleY = 1
+    const updateScales = () => {
+      if (!svg) return
+      const rect = svg.getBoundingClientRect()
+      if (rect.width > 0 && rect.height > 0) {
+        scaleX = rect.width / svgWidth
+        scaleY = rect.height / svgHeight
+      }
     }
+    updateScales()
 
     // Initialize SVG path stroke dash
     gsap.set([path, shadowPath], {
@@ -272,13 +273,14 @@ export function AboutHistoryTimeline() {
       }
     }
 
-    // ScrollTrigger instance that starts drawing right when the section reaches viewport
+    // ScrollTrigger instance with 60 FPS performance and zero lag
     const ctx = gsap.context(() => {
       const st = ScrollTrigger.create({
         trigger: container,
-        start: 'top 50%',
+        start: 'top 65%',
         end: 'bottom 90%',
-        scrub: 0.4,
+        scrub: 0.35,
+        onRefresh: updateScales,
         onUpdate: (self) => {
           const progress = self.progress
           const currentLength = progress * totalLength
@@ -306,10 +308,6 @@ export function AboutHistoryTimeline() {
           }, 100)
 
           // Position pencil tip directly at current point on path
-          const rect = svg.getBoundingClientRect()
-          const scaleX = rect.width / svgWidth
-          const scaleY = rect.height / svgHeight
-
           const pt = path.getPointAtLength(currentLength)
           const ptAhead = path.getPointAtLength(
             Math.min(totalLength, currentLength + 3),
@@ -336,11 +334,11 @@ export function AboutHistoryTimeline() {
             scale: progress > 0.005 && progress < 0.99 ? 1 : 0.85,
           })
 
-          // Activate dots as the pencil passes them with exact arc-length synchronization
+          // Activate dots as the pencil passes them
           dotsRef.current.forEach((dot, idx) => {
             if (!dot) return
             const dotLength = dotLengths[idx] ?? (idx / MILESTONES.length) * totalLength
-            if (currentLength >= dotLength - 12) {
+            if (currentLength >= dotLength - 15) {
               gsap.to(dot, {
                 opacity: 1,
                 scale: 1,
@@ -358,7 +356,7 @@ export function AboutHistoryTimeline() {
             }
           })
 
-          // Pop milestone cards as pencil reaches them with exact arc-length synchronization
+          // Pop milestone cards as pencil reaches them
           cardsRef.current.forEach((card, idx) => {
             if (!card) return
             const dotLength = dotLengths[idx] ?? (idx / MILESTONES.length) * totalLength
@@ -384,8 +382,11 @@ export function AboutHistoryTimeline() {
         },
       })
 
+      window.addEventListener('resize', updateScales, { passive: true })
+
       return () => {
         st.kill()
+        window.removeEventListener('resize', updateScales)
         if (wobbleTween) wobbleTween.kill()
         if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
       }

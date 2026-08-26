@@ -21,6 +21,11 @@ const navItems: NavItem[] = [
   { name: 'Team', url: '#team', icon: Users },
 ]
 
+import gsap from 'gsap'
+import { ScrollTrigger } from 'gsap/ScrollTrigger'
+
+gsap.registerPlugin(ScrollTrigger)
+
 function App() {
   const [currentView, setCurrentView] = useState<'home' | 'about'>('home')
 
@@ -29,12 +34,14 @@ function App() {
       const hash = window.location.hash
       if (hash === '#about') {
         setCurrentView('about')
-        // Always land cleanly at the top of the page when opening About
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
       } else if (hash === '#home' || hash === '#top' || !hash) {
         setCurrentView('home')
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
       }
+      setTimeout(() => {
+        ScrollTrigger.refresh()
+      }, 50)
     }
 
     handleHash()
