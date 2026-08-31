@@ -103,7 +103,6 @@ export function AboutHistoryTimeline() {
   const svgRef = useRef<SVGSVGElement>(null)
   const pathRef = useRef<SVGPathElement>(null)
   const shadowPathRef = useRef<SVGPathElement>(null)
-  const arrowHeadRef = useRef<SVGPathElement>(null)
   const pencilRef = useRef<HTMLDivElement>(null)
   const pencilInnerRef = useRef<HTMLDivElement>(null)
   const cardsRef = useRef<(HTMLDivElement | null)[]>([])
@@ -113,42 +112,53 @@ export function AboutHistoryTimeline() {
   const isScrollingRef = useRef(false)
   const scrollTimeoutRef = useRef<number | null>(null)
 
-  // Track responsive screen size
+  // Track responsive screen size with debounced ScrollTrigger refresh
   useEffect(() => {
-    const checkMobile = () => {
-      setIsMobile(window.innerWidth < 768)
+    let resizeTimer: number | null = null
+    const handleResize = () => {
+      if (resizeTimer) window.clearTimeout(resizeTimer)
+      resizeTimer = window.setTimeout(() => {
+        const mobile = window.innerWidth < 768
+        setIsMobile(mobile)
+        ScrollTrigger.refresh()
+      }, 50)
     }
-    window.addEventListener('resize', checkMobile, { passive: true })
-    return () => window.removeEventListener('resize', checkMobile)
+    window.addEventListener('resize', handleResize, { passive: true })
+    return () => {
+      window.removeEventListener('resize', handleResize)
+      if (resizeTimer) window.clearTimeout(resizeTimer)
+    }
   }, [])
 
-  // Geometry configuration
+  // Geometry configuration with exact row synchronization
   const svgWidth = isMobile ? 380 : 1000
-  const rowHeight = isMobile ? 370 : 360
-  const topPad = 60
-  const svgHeight = MILESTONES.length * rowHeight + topPad + 140
+  const rowHeight = isMobile ? 380 : 360
+  const topPad = isMobile ? 40 : 60
+  const svgHeight = MILESTONES.length * rowHeight + topPad
 
   // Milestone points along the path
   const milestonePoints: { x: number; y: number }[] = []
   let pathD = ''
 
   if (isMobile) {
-    // Mobile straight vertical line down X = 40
-    const startX = 40
-    const startY = 30
-    const endY = svgHeight - 40
-    pathD = `M ${startX} ${startY} L ${startX} ${endY}`
+    // Mobile straight vertical line down X = 36
+    const startX = 36
+    const startY = topPad * 0.5
 
     MILESTONES.forEach((_, i) => {
       milestonePoints.push({
         x: startX,
-        y: topPad + 50 + i * rowHeight,
+        y: topPad + i * rowHeight + rowHeight / 2,
       })
     })
+
+    // Path terminates precisely at the last dot (2026)
+    const lastTargetY = milestonePoints[milestonePoints.length - 1]?.y ?? (svgHeight - rowHeight / 2)
+    pathD = `M ${startX} ${startY} L ${startX} ${lastTargetY}`
   } else {
     // Desktop wavy harmonic Bézier curve weaving through milestones
     const startX = 500
-    const startY = 20
+    const startY = topPad * 0.5
     let currentX = startX
     let currentY = startY
 
@@ -156,7 +166,7 @@ export function AboutHistoryTimeline() {
 
     MILESTONES.forEach((milestone, i) => {
       const targetX = milestone.side === 'left' ? 465 : 535
-      const targetY = topPad + 60 + i * rowHeight
+      const targetY = topPad + i * rowHeight + rowHeight / 2
 
       milestonePoints.push({ x: targetX, y: targetY })
 
@@ -169,11 +179,7 @@ export function AboutHistoryTimeline() {
       currentX = targetX
       currentY = targetY
     })
-
-    // Settle to center bottom arrow
-    const endX = 500
-    const endY = svgHeight - 40
-    pathD += ` C ${currentX} ${currentY + 80}, ${endX} ${endY - 60}, ${endX} ${endY}`
+    // Path terminates precisely at the 2026 dot (currentX, currentY)
   }
 
   // Setup GSAP scroll-driven path drawing & pencil tracking
@@ -182,7 +188,6 @@ export function AboutHistoryTimeline() {
     const svg = svgRef.current
     const path = pathRef.current
     const shadowPath = shadowPathRef.current
-    const arrowHead = arrowHeadRef.current
     const pencil = pencilRef.current
     const pencilInner = pencilInnerRef.current
 
@@ -194,12 +199,24 @@ export function AboutHistoryTimeline() {
 
     const totalLength = path.getTotalLength()
 
-    // Fast, zero-lag analytical arc-length milestones (0 blocking iterations)
-    const dotLengths: number[] = MILESTONES.map((_, i) => {
+    // Measure exact arc length of each milestone point along the path
+    const dotLengths: number[] = milestonePoints.map((pt) => {
       if (isMobile) {
-        return (milestonePoints[i]?.y ?? 0) - 30
+        return Math.max(0, pt.y - topPad * 0.5)
       }
-      return ((i + 0.6) / (MILESTONES.length + 0.4)) * totalLength
+      let bestLen = 0
+      let bestDist = Infinity
+      const samples = 200
+      for (let s = 0; s <= samples; s++) {
+        const l = (s / samples) * totalLength
+        const p = path.getPointAtLength(l)
+        const dist = Math.hypot(p.x - pt.x, p.y - pt.y)
+        if (dist < bestDist) {
+          bestDist = dist
+          bestLen = l
+        }
+      }
+      return bestLen
     })
 
     // Cache scale metrics to avoid layout reflows in onUpdate
@@ -220,10 +237,6 @@ export function AboutHistoryTimeline() {
       strokeDasharray: totalLength,
       strokeDashoffset: prefersReduced ? 0 : totalLength,
     })
-
-    if (arrowHead) {
-      gsap.set(arrowHead, { opacity: prefersReduced ? 1 : 0 })
-    }
 
     if (prefersReduced) {
       gsap.set(pencil, { opacity: 0 })
@@ -278,11 +291,14 @@ export function AboutHistoryTimeline() {
       const st = ScrollTrigger.create({
         trigger: container,
         start: 'top 65%',
-        end: 'bottom 90%',
+        end: 'bottom bottom',
         scrub: 0.35,
         onRefresh: updateScales,
         onUpdate: (self) => {
-          const progress = self.progress
+          const rawProgress = self.progress
+          // Normalize progress so 100% completion is reached at 88% scroll depth
+          // guaranteeing the pencil reaches and rests right on the 2026 dot before scroll ends
+          const progress = Math.min(1, Math.max(0, rawProgress / 0.88))
           const currentLength = progress * totalLength
 
           // Animate line draw
@@ -292,25 +308,26 @@ export function AboutHistoryTimeline() {
             shadowPath.style.strokeDashoffset = `${offset}`
           }
 
-          if (arrowHead) {
-            arrowHead.style.opacity = progress > 0.96 ? '1' : '0'
-          }
-
           // Active drawing detection for wobble
-          isScrollingRef.current = true
-          startWobble()
-          if (scrollTimeoutRef.current) {
-            window.clearTimeout(scrollTimeoutRef.current)
-          }
-          scrollTimeoutRef.current = window.setTimeout(() => {
-            isScrollingRef.current = false
+          if (progress < 0.99) {
+            isScrollingRef.current = true
+            startWobble()
+            if (scrollTimeoutRef.current) {
+              window.clearTimeout(scrollTimeoutRef.current)
+            }
+            scrollTimeoutRef.current = window.setTimeout(() => {
+              isScrollingRef.current = false
+              stopWobble()
+            }, 100)
+          } else {
             stopWobble()
-          }, 100)
+          }
 
           // Position pencil tip directly at current point on path
-          const pt = path.getPointAtLength(currentLength)
+          const clampedLen = Math.min(totalLength, currentLength)
+          const pt = path.getPointAtLength(clampedLen)
           const ptAhead = path.getPointAtLength(
-            Math.min(totalLength, currentLength + 3),
+            Math.min(totalLength, clampedLen + (clampedLen >= totalLength - 2 ? 0 : 3)),
           )
 
           // Map SVG coordinates to rendered container pixels
@@ -320,7 +337,8 @@ export function AboutHistoryTimeline() {
           // Compute tangent angle for natural pencil tilting
           const dx = (ptAhead.x - pt.x) * scaleX
           const dy = (ptAhead.y - pt.y) * scaleY
-          const baseAngle = (Math.atan2(dy, dx) * 180) / Math.PI
+          const baseAngle =
+            dx === 0 && dy === 0 ? 90 : (Math.atan2(dy, dx) * 180) / Math.PI
 
           // Adjust base angle so pencil points diagonally downward
           const angleOffset = isMobile ? -35 : -32
@@ -330,15 +348,15 @@ export function AboutHistoryTimeline() {
             x: pixelX,
             y: pixelY,
             rotation: finalAngle,
-            opacity: progress > 0.005 ? 1 : 0,
-            scale: progress > 0.005 && progress < 0.99 ? 1 : 0.85,
+            opacity: rawProgress > 0.005 ? 1 : 0,
+            scale: rawProgress > 0.005 ? 1 : 0.85,
           })
 
           // Activate dots as the pencil passes them
           dotsRef.current.forEach((dot, idx) => {
             if (!dot) return
-            const dotLength = dotLengths[idx] ?? (idx / MILESTONES.length) * totalLength
-            if (currentLength >= dotLength - 15) {
+            const dotLen = dotLengths[idx] ?? (idx / MILESTONES.length) * totalLength
+            if (currentLength >= dotLen - 20) {
               gsap.to(dot, {
                 opacity: 1,
                 scale: 1,
@@ -359,8 +377,8 @@ export function AboutHistoryTimeline() {
           // Pop milestone cards as pencil reaches them
           cardsRef.current.forEach((card, idx) => {
             if (!card) return
-            const dotLength = dotLengths[idx] ?? (idx / MILESTONES.length) * totalLength
-            if (currentLength >= dotLength - 35) {
+            const dotLen = dotLengths[idx] ?? (idx / MILESTONES.length) * totalLength
+            if (currentLength >= dotLen - 50) {
               gsap.to(card, {
                 opacity: 1,
                 y: 0,
@@ -382,24 +400,28 @@ export function AboutHistoryTimeline() {
         },
       })
 
-      window.addEventListener('resize', updateScales, { passive: true })
+      // Ensure dimensions are settled
+      const initialTimer = window.setTimeout(() => {
+        updateScales()
+        ScrollTrigger.refresh()
+      }, 50)
 
       return () => {
         st.kill()
-        window.removeEventListener('resize', updateScales)
+        window.clearTimeout(initialTimer)
         if (wobbleTween) wobbleTween.kill()
         if (scrollTimeoutRef.current) clearTimeout(scrollTimeoutRef.current)
       }
     }, containerRef)
 
     return () => ctx.revert()
-  }, [isMobile, svgWidth, svgHeight])
+  }, [isMobile, svgWidth, svgHeight, topPad])
 
   return (
     <section
       ref={containerRef}
       id="history-timeline"
-      className="relative w-full bg-transparent text-cream overflow-hidden pt-0 pb-32 select-none"
+      className="relative w-full bg-transparent text-cream overflow-hidden pt-0 pb-64 sm:pb-80 select-none"
       aria-label="E-Cell History and Milestones Timeline"
     >
       <PencilDefs />
@@ -451,7 +473,7 @@ export function AboutHistoryTimeline() {
         */}
         <div
           className="relative w-full mx-auto"
-          style={{ minHeight: `${svgHeight}px` }}
+          style={{ height: `${svgHeight}px` }}
         >
           {/* SVG Canvas for Graphite Line & Anchor Dots */}
           <svg
@@ -490,21 +512,6 @@ export function AboutHistoryTimeline() {
               strokeLinecap="round"
               strokeLinejoin="round"
               filter="url(#graphite-grain)"
-            />
-
-            {/* Bottom Arrow Head */}
-            <path
-              ref={arrowHeadRef}
-              d={
-                isMobile
-                  ? `M 32 ${svgHeight - 55} L 40 ${svgHeight - 40} L 48 ${svgHeight - 55}`
-                  : `M 490 ${svgHeight - 55} L 500 ${svgHeight - 40} L 510 ${svgHeight - 55}`
-              }
-              stroke="#4B4E53"
-              strokeWidth={3.5}
-              strokeLinecap="round"
-              strokeLinejoin="round"
-              className="transition-opacity duration-300"
             />
 
             {/* Hand-Drawn Milestone Dots with Radiating Sketch Ticks (Color #cfd1d9) */}
@@ -565,7 +572,7 @@ export function AboutHistoryTimeline() {
           {/* 
             ======================================================================
             DYNAMIC DRAWING PENCIL COMPONENT
-            The graphite lead tip (at 98.35% X, 100% Y) follows the line head.
+            The graphite lead tip (at 98.35% X, 100% Y) follows the line head and stops at 2026.
             ======================================================================
           */}
           <div
@@ -615,7 +622,10 @@ export function AboutHistoryTimeline() {
             Vertical Paper Cards with realistic depth, shadows, 10-15 deg tilt, and Orange Year text.
             ======================================================================
           */}
-          <div className="relative z-20 space-y-12 sm:space-y-16 md:space-y-0">
+          <div
+            className="relative z-20"
+            style={{ paddingTop: `${topPad}px` }}
+          >
             {MILESTONES.map((milestone, idx) => {
               const isLeft = milestone.side === 'left'
 
@@ -628,13 +638,13 @@ export function AboutHistoryTimeline() {
                   className={cn(
                     'relative flex w-full items-center opacity-0 transition-all duration-300',
                     isMobile
-                      ? 'justify-start pl-16 pr-2'
+                      ? 'justify-start pl-16 sm:pl-20 pr-2'
                       : isLeft
                         ? 'justify-start md:pr-[55%] md:pl-2'
                         : 'justify-end md:pl-[55%] md:pr-2',
                   )}
                   style={{
-                    minHeight: isMobile ? '360px' : `${rowHeight}px`,
+                    height: `${rowHeight}px`,
                   }}
                 >
                   {/* 
@@ -703,3 +713,4 @@ export function AboutHistoryTimeline() {
     </section>
   )
 }
+
