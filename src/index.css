@@ -93,6 +93,7 @@
 
   --font-display: "Bricolage Grotesque Variable", "Trebuchet MS", sans-serif;
   --font-body: "Geist Variable", ui-sans-serif, system-ui, sans-serif;
+  --font-quicksand: "Quicksand", sans-serif;
 
   /* Smaller than Tailwind's `text-xs`. Used only for the tracked uppercase
      label inside a placeholder frame. */
