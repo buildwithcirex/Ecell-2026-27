@@ -350,7 +350,14 @@ export function FlowfestCard({
               height={member.photo!.height}
               loading="lazy"
               decoding="async"
-              className="absolute inset-0 h-full w-full select-none object-cover pointer-events-none"
+              style={{
+                objectPosition: member.photo!.objectPosition,
+                ...member.photo!.style,
+              }}
+              className={cn(
+                'absolute inset-0 h-full w-full select-none object-cover pointer-events-none',
+                member.photo!.className,
+              )}
             />
           ) : (
             <TeamPlaceholderIllustration

@@ -14,12 +14,22 @@
 
 import secretaryImg from '@/assets/team/secretary.png'
 import webDevHeadImg from '@/assets/team/web-dev-head.png'
+import cyberHeadImg from '@/assets/team/cyber-head.png'
+import devopsCoheadImg from '@/assets/team/devops-cohead.png'
+import eventHeadImg from '@/assets/team/event-head.png'
+import eventsCohead1Img from '@/assets/team/events-cohead-1.png'
+import hospitalityHeadImg from '@/assets/team/hospitality-head.png'
+import volunteeringHeadImg from '@/assets/team/volunteering-head.png'
+import aimlCoheadImg from '@/assets/team/ai-ml-cohead.png'
 
 export interface TeamPhoto {
   readonly src: string
   readonly alt: string
   readonly width: number
   readonly height: number
+  readonly objectPosition?: string
+  readonly className?: string
+  readonly style?: React.CSSProperties
 }
 
 export interface TeamMember {
@@ -141,9 +151,15 @@ const technical: TeamMember[] = [
     tag: 'CyberSecurity Head',
     cursorText: 'Aryan Wesavkar',
     cursorColor: '#a855f7',
-    placeholderColor: '#a855f7',
     description:
       'Breaks things <strong>on purpose</strong> so the rest of us do not have to. Will find the <strong>bug</strong>. Will not tell you first.',
+    photo: {
+      src: cyberHeadImg,
+      alt: 'Aryan Wesavkar, Cybersecurity Head',
+      width: 1047,
+      height: 1661,
+      objectPosition: 'center 15%',
+    },
   },
   {
     id: 'cybersec-cohead',
@@ -174,9 +190,19 @@ const technical: TeamMember[] = [
     tag: 'Ai/Ml Co-Head',
     cursorText: 'Sanchita Pawar',
     cursorColor: '#60a5fa',
-    placeholderColor: '#60a5fa',
     description:
       'Tames the <strong>GPU bill</strong> and reads the <strong>arXiv</strong> so the rest of the team can pretend they did. Fair trade.',
+    photo: {
+      src: aimlCoheadImg,
+      alt: 'Sanchita Pawar, AI/ML Co-Head',
+      width: 1254,
+      height: 1254,
+      objectPosition: 'center 15%',
+      style: {
+        transform: 'scale(1.28)',
+        transformOrigin: '50% 20%',
+      },
+    },
   },
   {
     id: 'iot-head',
@@ -245,9 +271,19 @@ const technical: TeamMember[] = [
     tag: 'DevOps Co-Head',
     cursorText: 'Jeeval Patil',
     cursorColor: '#818cf8',
-    placeholderColor: '#818cf8',
     description:
       'Pages the team at <strong>3am</strong> when the cluster sneezes. Has a sticker on the laptop: <strong>"it works on my box"</strong>.',
+    photo: {
+      src: devopsCoheadImg,
+      alt: 'Jeeval Patil, DevOps Co-Head',
+      width: 972,
+      height: 1618,
+      objectPosition: 'center 20%',
+      style: {
+        transform: 'scale(1.6)',
+        transformOrigin: '50% 25%',
+      },
+    },
   },
 ]
 
@@ -263,9 +299,19 @@ const events: TeamMember[] = [
     tag: 'Event Head',
     cursorText: 'Piyush Singh',
     cursorColor: '#ea5283',
-    placeholderColor: '#ea5283',
     description:
       'Says <strong>yes</strong> to every event idea, then figures out how. Has a <strong>calendar</strong> that would break a normal human.',
+    photo: {
+      src: eventHeadImg,
+      alt: 'Piyush Singh, Event Head',
+      width: 1086,
+      height: 1608,
+      objectPosition: 'center 15%',
+      style: {
+        transform: 'scale(1.22)',
+        transformOrigin: '50% 25%',
+      },
+    },
   },
   {
     id: 'event-cohead-l',
@@ -274,9 +320,19 @@ const events: TeamMember[] = [
     tag: 'Event Co-Head',
     cursorText: 'Sahil Madiwala',
     cursorColor: '#f97028',
-    placeholderColor: '#f97028',
     description:
       'Books the <strong>room</strong>, books the <strong>mic</strong>, books the panic attack. Brings the <strong>clipboard</strong> to every meeting.',
+    photo: {
+      src: eventsCohead1Img,
+      alt: 'Sahil Madiwala, Event Co-Head',
+      width: 1149,
+      height: 1369,
+      objectPosition: 'center 20%',
+      style: {
+        transform: 'scale(1.35)',
+        transformOrigin: '50% 25%',
+      },
+    },
   },
   {
     id: 'event-cohead-r',
@@ -296,9 +352,19 @@ const events: TeamMember[] = [
     tag: 'Hospitality Head',
     cursorText: 'Krupa Marakal',
     cursorColor: '#38bdf8',
-    placeholderColor: '#38bdf8',
     description:
       'Feeds the <strong>team</strong>. Feeds the <strong>speakers</strong>. Knows which canteen is open on <strong>Sundays</strong>.',
+    photo: {
+      src: hospitalityHeadImg,
+      alt: 'Krupa Marakal, Hospitality Head',
+      width: 1088,
+      height: 1605,
+      objectPosition: 'center 15%',
+      style: {
+        transform: 'scale(1.25)',
+        transformOrigin: '50% 25%',
+      },
+    },
   },
   {
     id: 'volunteering-head',
@@ -307,9 +373,14 @@ const events: TeamMember[] = [
     tag: 'Volunteering Head',
     cursorText: 'Jimeet Trivedi',
     cursorColor: '#a855f7',
-    placeholderColor: '#a855f7',
     description:
       'Herds the <strong>volunteers</strong>, who are mostly freshmen. Has a group chat that <strong>pings constantly</strong> and a patient face.',
+    photo: {
+      src: volunteeringHeadImg,
+      alt: 'Jimeet Trivedi, Volunteering Head',
+      width: 1216,
+      height: 1293,
+    },
   },
 ]
 
