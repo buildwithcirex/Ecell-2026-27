@@ -21,6 +21,7 @@ import eventsCohead1Img from '@/assets/team/events-cohead-1.png'
 import hospitalityHeadImg from '@/assets/team/hospitality-head.png'
 import volunteeringHeadImg from '@/assets/team/volunteering-head.png'
 import aimlCoheadImg from '@/assets/team/ai-ml-cohead.png'
+import webDevCoheadImg from '@/assets/team/web-dev-cohead.png'
 
 export interface TeamPhoto {
   readonly src: string
@@ -249,9 +250,19 @@ const technical: TeamMember[] = [
     tag: 'Web Dev Co-Head',
     cursorText: 'Rushabh Makwana',
     cursorColor: '#ea5283',
-    placeholderColor: '#ea5283',
     description:
       'Reviews the <strong>PRs</strong> the head rubber-stamped. Writes the <strong>tests</strong> nobody asked for. Always right.',
+    photo: {
+      src: webDevCoheadImg,
+      alt: 'Rushabh Makwana, Web Dev Co-Head',
+      width: 1086,
+      height: 1448,
+      objectPosition: 'center 15%',
+      style: {
+        transform: 'scale(1.35)',
+        transformOrigin: '50% 25%',
+      },
+    },
   },
   {
     id: 'devops-head',

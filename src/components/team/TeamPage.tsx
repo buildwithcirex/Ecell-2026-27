@@ -215,14 +215,14 @@ interface TeamPageProps {
 /**
  * The team page. Renders every strip from `data` in order.
  *
- * Background matches FlowFest's warm cream ground (#f3ecd2), with crisp
+ * Background matches FlowFest's warm cream ground (#f9f6ef), with crisp
  * typography, no seam line divider, and centered masthead.
  */
 export function TeamPage({ data }: TeamPageProps) {
   const { ref: headerRef, inView: headerInView } = useInView<HTMLElement>()
 
   return (
-    <article className="relative w-full overflow-hidden bg-[#f3ecd2] text-[#121212] min-h-screen">
+    <article className="relative w-full overflow-hidden bg-[linear-gradient(to_right,#f9f6ef_0%,#f9f6ef_100%)] text-[#121212] min-h-screen">
       {/* Skip target */}
       <span id="team" tabIndex={-1} className="sr-only" aria-hidden="true" />
 
