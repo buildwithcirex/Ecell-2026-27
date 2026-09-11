@@ -7,6 +7,8 @@ import { AboutBookHero } from '@/components/about/AboutBookHero'
 import { AboutHistoryTimeline } from '@/components/about/AboutHistoryTimeline'
 import { StorySoFar } from '@/components/about/StorySoFar'
 import { Hero } from '@/components/hero/Hero'
+import { TeamPage } from '@/components/team/TeamPage'
+import { team2026 } from '@/content/team-2026'
 import { Logo } from '@/components/ui/logo'
 import { NavBar, type NavItem } from '@/components/ui/tube-light-navbar'
 
@@ -26,17 +28,31 @@ import { ScrollTrigger } from 'gsap/ScrollTrigger'
 
 gsap.registerPlugin(ScrollTrigger)
 
+/** Which top-level route the URL hash points at. */
+type View = 'home' | 'about' | 'team'
+
+/**
+ * Map a URL hash to the view it belongs to. Unknown hashes fall back to
+ * home so a typo never strands the visitor on a broken page.
+ */
+function hashToView(hash: string): View {
+  if (hash === '#about') return 'about'
+  if (hash === '#team') return 'team'
+  return 'home'
+}
+
 function App() {
-  const [currentView, setCurrentView] = useState<'home' | 'about'>('home')
+  const [currentView, setCurrentView] = useState<View>(() =>
+    hashToView(window.location.hash),
+  )
 
   useEffect(() => {
     const handleHash = () => {
-      const hash = window.location.hash
-      if (hash === '#about') {
-        setCurrentView('about')
+      const next = hashToView(window.location.hash)
+      setCurrentView(next)
+      if (next !== 'home') {
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
-      } else if (hash === '#home' || hash === '#top' || !hash) {
-        setCurrentView('home')
+      } else if (window.location.hash === '' || window.location.hash === '#top' || window.location.hash === '#home') {
         window.scrollTo({ top: 0, left: 0, behavior: 'instant' })
       }
       setTimeout(() => {
@@ -58,7 +74,7 @@ function App() {
 
       <a
         href="#hero-heading"
-        className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:left-3 focus-visible:z-100 focus-visible:rounded-full focus-visible:bg-paper focus-visible:px-4 focus-visible:py-2 focus-visible:font-body focus-visible:text-sm focus-visible:font-semibold focus-visible:text-ink"
+        className="sr-only focus-visible:not-sr-only focus-visible:fixed focus-visible:top-3 focus-visible:left-3 focus-visible:z-100 focus-visible:rounded-full focus-visible:bg-paper focus-visible:px-4 focus-visible:py-2 focus-visible:font-body focus-visible:text-sm focus-visible:font-semibold text-ink"
       >
         Skip to content
       </a>
@@ -84,6 +100,8 @@ function App() {
             <AboutBookHero />
             <AboutHistoryTimeline />
           </div>
+        ) : currentView === 'team' ? (
+          <TeamPage data={team2026} />
         ) : (
           <>
             <Hero />

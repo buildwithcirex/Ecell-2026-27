@@ -60,8 +60,8 @@ Grain: SVG turbulence noise at 3.5 percent opacity, fixed to the viewport, above
 
 | Role | Face | Weights |
 |------|------|---------|
-| Display | Bricolage Grotesque, variable | 600, 800 |
-| Body and UI | Geist Sans | 400, 500 |
+| Display | sugarpeachy | 400, 900 |
+| Body and UI | Quicksand | 400, 500, 600, 700 |
 | Mono, labels, all numbers | JetBrains Mono | 400, 500 |
 
 Self-hosted via `next/font/local`, subset to latin, `display: swap`, metric-adjusted fallbacks so a swap causes no shift. Total font payload budget 180KB.
@@ -141,8 +141,8 @@ Implemented as CSS custom properties in `app/globals.css`, exposed to Tailwind v
   --color-ink-line: rgb(250 248 244 / 0.20);
   --color-signal-ink: #0E0E0F;
 
-  --font-display: "Bricolage Grotesque Variable", "Arial Black", sans-serif;
-  --font-body: "Geist Sans", ui-sans-serif, system-ui, sans-serif;
+  --font-display: "sugarpeachy", cursive, sans-serif;
+  --font-body: "Quicksand", sans-serif;
   --font-mono: "JetBrains Mono", ui-monospace, monospace;
 
   --text-display: clamp(3.25rem, 11vw, 11rem);
