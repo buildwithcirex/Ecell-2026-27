@@ -1,30 +1,16 @@
-import { heroStickers } from '@/content/hero-graphics'
 import { WetPaintButton } from '@/components/ui/wet-paint-button'
-import { DoodleGraphic } from './DoodleGraphic'
 import { FrameCluster } from './FrameCluster'
 import { HeroBackground } from './HeroBackground'
 import { PaperTear } from './PaperTear'
-import { Sparkle } from './graphics/doodles'
 
 /**
  * Landing section.
  *
  * Layers, back to front:
- *   0  ground and faint line art       HeroBackground
- *  10  torn paper edge                 PaperTear
- *  20  flank photo scatter             FrameCluster
- *  30  loose stickers                  DoodleGraphic
- *  40  centre column                   headline, description, CTA
- *
- * The tear paints under the frames so the bottom photos lie over the paper
- * rather than being cut off by it. The centre column stays on top of
- * everything: a frame growing on hover must never cover the copy. That holds
- * even though a hovered frame raises its own `z-index`, because FrameCluster's
- * own `z-20` boxes that in to a local stacking context.
- *
- * `min-h-svh` rather than `min-h-screen`: on mobile Safari and Chrome, `100vh`
- * is the viewport with the URL bar hidden, so a `100vh` section is taller than
- * what is on screen and the torn edge starts below the fold.
+ *   0  ground and illustration overlay  HeroBackground
+ *  10  torn paper edge                  PaperTear
+ *  20  flank photo scatter              FrameCluster
+ *  40  centre column                    headline, description, CTA
  */
 export function Hero() {
   return (
@@ -34,82 +20,6 @@ export function Hero() {
     >
       <HeroBackground />
       <FrameCluster />
-
-      {/* Six stickers plus one drawn accent.
-
-          Held back until `lg`, not `md`. The copy column is capped at 46ch, so
-          on a 768px tablet it spans almost the full width and the side gutters
-          are narrower than a sticker: every placement measured as an overlap on
-          the headline or the description. At 1024 the gutters are wide enough
-          for them to sit clear. */}
-      <div className="pointer-events-none absolute inset-0 z-30 hidden lg:block">
-        {heroStickers.map((sticker) => (
-          <DoodleGraphic
-            key={sticker.id}
-            top={sticker.top}
-            left={sticker.left}
-            right={sticker.right}
-            rotate={sticker.rotate}
-            delay={sticker.delay}
-            width={sticker.width_css}
-            drift={sticker.drift}
-            className="pointer-events-auto"
-          >
-            <img
-              src={sticker.src}
-              alt=""
-              width={sticker.width}
-              height={sticker.height}
-              loading="lazy"
-              decoding="async"
-              className="h-auto w-full"
-            />
-          </DoodleGraphic>
-        ))}
-
-        {/* The one element in the section that is Signal, and the only drawn
-            mark left in the foreground. It ties the stickers to the CTA. */}
-        <DoodleGraphic
-          top={16}
-          left={40}
-          delay={680}
-          width="clamp(0.9rem, 1.3vw, 1.4rem)"
-          className="pointer-events-auto text-signal"
-        >
-          <Sparkle className="w-full" />
-        </DoodleGraphic>
-      </div>
-
-      {/* The narrow layout keeps two of the stickers, placed in the bands above
-          the headline and below the CTA. Under `lg` those are the only strips
-          of ground the copy leaves clear, so this is a separate layer rather
-          than the same one repositioned. */}
-      <div className="pointer-events-none absolute inset-0 z-30 lg:hidden">
-        {heroStickers
-          .filter((sticker) => sticker.narrow)
-          .map((sticker) => (
-            <DoodleGraphic
-              key={sticker.id}
-              top={sticker.narrow!.top}
-              left={sticker.narrow!.left}
-              right={sticker.narrow!.right}
-              rotate={sticker.rotate}
-              delay={sticker.delay}
-              width={sticker.narrow!.width_css}
-              className="pointer-events-auto"
-            >
-              <img
-                src={sticker.src}
-                alt=""
-                width={sticker.width}
-                height={sticker.height}
-                loading="lazy"
-                decoding="async"
-                className="h-auto w-full"
-              />
-            </DoodleGraphic>
-          ))}
-      </div>
 
       {/* Centre column */}
       <div className="relative z-40 flex w-full max-w-3xl flex-col items-center text-center">
@@ -127,7 +37,7 @@ export function Hero() {
           Shit
         </h1>
 
-        <p className="hero-rise mt-6 max-w-[46ch] font-body text-base leading-relaxed text-steel sm:mt-7 sm:text-lg">
+        <p className="hero-rise mt-6 max-w-[48ch] font-sans text-base font-semibold leading-relaxed text-cream sm:mt-7 sm:text-xl sm:font-medium sm:leading-relaxed tracking-[-0.01em] [text-shadow:_0_2px_10px_rgba(3,8,20,0.7)]">
           We help students move from intent to execution through ventures,
           hackathons, mentorship, and visible outcomes.
         </p>
