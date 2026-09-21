@@ -10,7 +10,7 @@ import { Hero } from '@/components/hero/Hero'
 import { TeamPage } from '@/components/team/TeamPage'
 import { team2026 } from '@/content/team-2026'
 import { Logo } from '@/components/ui/logo'
-import { NavBar, type NavItem } from '@/components/ui/tube-light-navbar'
+import { NavBar, type NavItem } from '@/components/ui/navbar'
 
 /**
  * Nav destinations.
