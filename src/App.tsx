@@ -11,6 +11,7 @@ import { TeamPage } from '@/components/team/TeamPage'
 import { team2026 } from '@/content/team-2026'
 import { Logo } from '@/components/ui/logo'
 import { NavBar, type NavItem } from '@/components/ui/navbar'
+import { Footer } from '@/components/footer/Footer'
 
 /**
  * Nav destinations.
@@ -99,13 +100,18 @@ function App() {
             />
             <AboutBookHero />
             <AboutHistoryTimeline />
+            <Footer showPaperTear={false} />
           </div>
         ) : currentView === 'team' ? (
-          <TeamPage data={team2026} />
+          <>
+            <TeamPage data={team2026} />
+            <Footer showPaperTear={false} />
+          </>
         ) : (
           <>
             <Hero />
             <StorySoFar />
+            <Footer />
           </>
         )}
       </main>
